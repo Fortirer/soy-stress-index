@@ -4,7 +4,7 @@
 
 The index scores each municipality and season for water deficit, extreme heat and their interaction, separately for the vegetative and reproductive stages, and weights the reproductive stages (flowering, pod set, seed fill) three times more. It is the scientific core of a climate-risk product for agricultural lenders, cooperatives and insurers.
 
-> Status: **v1 (satellite + weather by crop stage) is built and backtested** for Rio Grande do Sul and Paraná, harvests 2001-2023. Sentinel-2 field-scale code is included but not yet run on pilot fields.
+> Status: **v1 (satellite + weather by crop stage) is built and backtested** for Rio Grande do Sul and Paraná, harvests 2001-2023. A Sentinel-2 field pilot (15 plots, 2020/21 vs 2021/22) is included.
 
 ---
 
@@ -33,6 +33,26 @@ The index scores each municipality and season for water deficit, extreme heat an
 ![RS NDVI 2021 vs 2022](figures/fig4_rs_ndvi_2021_vs_2022.png)
 
 Caveat: NDVI measures the canopy during the season, so v1 is an **in-season monitor and loss estimator**, not a pre-season forecast. That is what lenders, co-ops and parametric insurers need during the season; pre-season pricing still uses the weather climatology.
+
+---
+
+## Sentinel-2 field pilot (2020/21 vs 2021/22 drought)
+
+Three RS municipalities with different 2022 losses. In a 10 x 10 km window in each, five ~35 ha sample plots were picked at random among cells that were at least 90% soybean in 2020/21, detected from Sentinel-2 itself (low NDVI in Oct-Nov, dense canopy in Jan-Feb; 20 m). Each plot's NDVI was followed through both seasons, and its crop stages read from its own curve.
+
+| Municipality | IBGE yield vs trend, 2021 to 2022 | MODIS municipal change, reproductive NDVI | Sentinel-2 plots, reproductive NDVI change (5 plots) |
+| --- | --- | --- | --- |
+| Dom Pedrito | +29% to -20% | -14% | -8% to -37% (median -25%) |
+| Cruz Alta | +38% to -53% | -31% | -12% to -61% (median -52%) |
+| Tupanciretã | +29% to -66% | -26% | -27% to -49% (median -45%) |
+
+![Sentinel-2 field plots](figures/fig5_sentinel2_fields.png)
+
+- Plot-level NDVI loss ranks the municipalities in the same order as IBGE yield loss, and it is closer to the size of the yield loss than municipal MODIS. MODIS mixes soybean with other cover at 1 km.
+- **Damage differs field by field.** In Cruz Alta, one plot lost 12% of reproductive NDVI while its neighbours lost 51-61%. A municipal index pays every field the same way; this is exactly the basis risk a field-level product removes.
+- Limits: plots are sample cells, not farm boundaries (CAR or co-op polygons would replace them), there are no field yields to validate against, and only two seasons are compared. Next step: real fields with harvest records from one co-op.
+
+Run it: `python scripts/07_sentinel2_pilot.py` then `python scripts/08_pilot_figure.py` (Sentinel-2 stacks are cached in `data/s2_cache/`).
 
 ---
 
@@ -104,7 +124,7 @@ Stress(stage) = Z(water deficit) + 0.5 * Z(extreme heat) + 0.5 * max(Z water, 0)
 | Crop stages per municipality-season from the NDVI curve | derived | `04_download_modis.py` |
 | Daily weather per municipality, water balance, heat, VPD by stage window | NASA POWER | `05_download_power.py` |
 | Full index and comparison with v0, NDVI only and rainfall | | `06_full_index.py` |
-| Field-scale NDVI (10 m) for pilot farms | Sentinel-2 L2A | `ssi.satellite.sentinel2_ndvi()` (not yet run) |
+| Field-scale NDVI for sample plots, 2 seasons | Sentinel-2 L2A (20 m) | `07_sentinel2_pilot.py`, `08_pilot_figure.py` |
 
 **Satellite details.** MOD13Q1 (Terra and Aqua, 8-day spacing) is read at about 1 km from the COG overviews. Pixels must be IGBP cropland (MCD12Q1) *and* show a summer cycle: low NDVI in Oct-Nov, high in Jan-Mar, amplitude at least 0.15. This removes pasture, forest and winter-wheat-only pixels. Stages per municipality-season:
 

@@ -4,3 +4,4 @@ __pycache__/
 data/power/
 .venv/
 logs/
+s2_cache/
