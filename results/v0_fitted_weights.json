@@ -1,0 +1,34 @@
+{
+  "RS + PR": {
+    "vegetative_water": 0.04,
+    "vegetative_heat": 0.341,
+    "vegetative_heat_x_dry": -0.229,
+    "reproductive_water": 0.566,
+    "reproductive_heat": 0.314,
+    "reproductive_heat_x_dry": 0.16
+  },
+  "RS": {
+    "vegetative_water": 0.143,
+    "vegetative_heat": 0.768,
+    "vegetative_heat_x_dry": -0.532,
+    "reproductive_water": 0.853,
+    "reproductive_heat": -0.564,
+    "reproductive_heat_x_dry": 0.927
+  },
+  "PR": {
+    "vegetative_water": 0.041,
+    "vegetative_heat": -0.093,
+    "vegetative_heat_x_dry": -0.049,
+    "reproductive_water": 0.128,
+    "reproductive_heat": 0.98,
+    "reproductive_heat_x_dry": -0.131
+  },
+  "All 10 states": {
+    "vegetative_water": -0.099,
+    "vegetative_heat": 0.243,
+    "vegetative_heat_x_dry": -0.182,
+    "reproductive_water": 0.363,
+    "reproductive_heat": 0.366,
+    "reproductive_heat_x_dry": -0.04
+  }
+}
