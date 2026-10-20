@@ -24,25 +24,33 @@ STAGE_INPUTS = {
 }
 
 
-def local_z(df: pd.DataFrame, col: str, by: str = "fips5") -> pd.Series:
-    """Standardized anomaly against each municipality's own record."""
-    g = df.groupby(by)[col]
-    sd = g.transform("std").replace(0, np.nan)
-    return (df[col] - g.transform("mean")) / sd
+def local_z(df: pd.DataFrame, col: str, by: str = "fips5", ref=None) -> pd.Series:
+    """Standardized anomaly against each municipality's own record.
+
+    ref: optional boolean mask of the rows that define the record (e.g. the
+    training years only, so that test seasons are scored against the past)."""
+    if ref is None:
+        g = df.groupby(by)[col]
+        sd = g.transform("std").replace(0, np.nan)
+        return (df[col] - g.transform("mean")) / sd
+    stats = df.loc[np.asarray(ref)].groupby(by)[col].agg(["mean", "std"])
+    m = df[by].map(stats["mean"])
+    sd = df[by].map(stats["std"]).replace(0, np.nan)
+    return (df[col] - m) / sd
 
 
-def components(df: pd.DataFrame) -> pd.DataFrame:
+def components(df: pd.DataFrame, ref=None) -> pd.DataFrame:
     """Per-stage stress components (z-scores)."""
     out = pd.DataFrame(index=df.index)
     for stage, cols in STAGE_INPUTS.items():
-        zw = local_z(df, cols["water"])
-        zh = local_z(df, cols["heat"])
+        zw = local_z(df, cols["water"], ref=ref)
+        zh = local_z(df, cols["heat"], ref=ref)
         out[f"{stage}_water"] = zw
         out[f"{stage}_heat"] = zh
         out[f"{stage}_heat_x_dry"] = zw.clip(lower=0) * zh.clip(lower=0)
         ndvi_col = f"ndvi_{stage}"
         if ndvi_col in df.columns:            # filled in once satellite data exists
-            out[f"{stage}_ndvi"] = -local_z(df, ndvi_col)
+            out[f"{stage}_ndvi"] = -local_z(df, ndvi_col, ref=ref)
     return out.fillna(0.0)
 
 
@@ -59,10 +67,10 @@ def stage_scores(comp: pd.DataFrame, a: dict | None = None) -> pd.DataFrame:
     return scores
 
 
-def ssi(df: pd.DataFrame, stage_weights: dict | None = None, a: dict | None = None) -> pd.Series:
+def ssi(df: pd.DataFrame, stage_weights: dict | None = None, a: dict | None = None, ref=None) -> pd.Series:
     """The a-priori Stage-weighted Stress Index."""
     w = stage_weights or STAGE_WEIGHTS
-    sc = stage_scores(components(df), a)
+    sc = stage_scores(components(df, ref), a)
     return sum(w[s] * sc[s] for s in w)
 
 
@@ -71,6 +79,6 @@ def unweighted_index(df: pd.DataFrame) -> pd.Series:
     return ssi(df, stage_weights={"vegetative": 0.5, "reproductive": 0.5})
 
 
-def rainfall_index(df: pd.DataFrame) -> pd.Series:
+def rainfall_index(df: pd.DataFrame, ref=None) -> pd.Series:
     """What a rainfall-index insurance product uses: low Jan-Feb rain = stress."""
-    return -local_z(df, "pcp_critical").fillna(0.0)
+    return -local_z(df, "pcp_critical", ref=ref).fillna(0.0)

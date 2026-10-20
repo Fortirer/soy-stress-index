@@ -1,0 +1,43 @@
+asof,region,index,auc_loss,basis_risk
+01-01,RS + PR,Turgor (as of date),0.677,0.342
+01-01,RS + PR,Rainfall index (as of date),0.5,0.0
+01-01,RS,Turgor (as of date),0.733,0.244
+01-01,RS,Rainfall index (as of date),0.5,0.0
+01-01,PR,Turgor (as of date),0.583,0.542
+01-01,PR,Rainfall index (as of date),0.5,0.0
+01-15,RS + PR,Turgor (as of date),0.578,0.441
+01-15,RS + PR,Rainfall index (as of date),0.442,0.582
+01-15,RS,Turgor (as of date),0.754,0.27
+01-15,RS,Rainfall index (as of date),0.694,0.298
+01-15,PR,Turgor (as of date),0.571,0.556
+01-15,PR,Rainfall index (as of date),0.432,0.669
+02-01,RS + PR,Turgor (as of date),0.619,0.43
+02-01,RS + PR,Rainfall index (as of date),0.592,0.466
+02-01,RS,Turgor (as of date),0.773,0.231
+02-01,RS,Rainfall index (as of date),0.794,0.197
+02-01,PR,Turgor (as of date),0.584,0.553
+02-01,PR,Rainfall index (as of date),0.524,0.538
+02-15,RS + PR,Turgor (as of date),0.71,0.321
+02-15,RS + PR,Rainfall index (as of date),0.676,0.368
+02-15,RS,Turgor (as of date),0.8,0.195
+02-15,RS,Rainfall index (as of date),0.798,0.191
+02-15,PR,Turgor (as of date),0.63,0.487
+02-15,PR,Rainfall index (as of date),0.627,0.487
+03-01,RS + PR,Turgor (as of date),0.695,0.348
+03-01,RS + PR,Rainfall index (as of date),0.572,0.504
+03-01,RS,Turgor (as of date),0.811,0.201
+03-01,RS,Rainfall index (as of date),0.783,0.212
+03-01,PR,Turgor (as of date),0.641,0.476
+03-01,PR,Rainfall index (as of date),0.567,0.513
+03-15,RS + PR,Turgor (as of date),0.673,0.372
+03-15,RS + PR,Rainfall index (as of date),0.563,0.505
+03-15,RS,Turgor (as of date),0.812,0.208
+03-15,RS,Rainfall index (as of date),0.777,0.231
+03-15,PR,Turgor (as of date),0.634,0.495
+03-15,PR,Rainfall index (as of date),0.575,0.509
+04-01,RS + PR,Turgor (as of date),0.674,0.365
+04-01,RS + PR,Rainfall index (as of date),0.563,0.505
+04-01,RS,Turgor (as of date),0.817,0.199
+04-01,RS,Rainfall index (as of date),0.777,0.231
+04-01,PR,Turgor (as of date),0.638,0.487
+04-01,PR,Rainfall index (as of date),0.575,0.509

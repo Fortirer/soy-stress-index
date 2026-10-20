@@ -5,3 +5,5 @@ data/power/
 .venv/
 logs/
 s2_cache/
+data/power_ext/
+data/field_cache/

@@ -4,7 +4,7 @@
 
 The index scores each municipality and season for water deficit, extreme heat and their interaction, separately for the vegetative and reproductive stages, and weights the reproductive stages (flowering, pod set, seed fill) three times more. It is the scientific core of a climate-risk product for agricultural lenders, cooperatives and insurers.
 
-> Status: **v1 (satellite + weather by crop stage) is built and backtested** for Rio Grande do Sul and Paraná, harvests 2001-2023. A Sentinel-2 field pilot (15 plots, 2020/21 vs 2021/22) is included.
+> Status: **v1 (satellite + weather by crop stage) is built and backtested** for Rio Grande do Sul and Paraná, harvests 2001-2023, **tested out of sample on 2024 and 2025**, with confidence intervals and an early-warning test. A Sentinel-2 field pilot (15 plots, 2020/21 vs 2021/22) and a ready-to-run field-yield validation for a co-op pilot are included.
 
 ---
 
@@ -33,6 +33,73 @@ The index scores each municipality and season for water deficit, extreme heat an
 ![RS NDVI 2021 vs 2022](figures/fig4_rs_ndvi_2021_vs_2022.png)
 
 Caveat: NDVI measures the canopy during the season, so v1 is an **in-season monitor and loss estimator**, not a pre-season forecast. That is what lenders, co-ops and parametric insurers need during the season; pre-season pricing still uses the weather climatology.
+
+---
+
+## Validation round (October 2026): new seasons, confidence intervals, lead time
+
+### 1. Out-of-sample test on the 2024 and 2025 harvests
+
+These two harvests were never used to build the index. Yields come fresh from IBGE PAM (SIDRA table 1612). Each municipality's trend and its z-score reference use 2001-2023 only, and the weights are unchanged. 1,542 municipality-harvests in RS and PR.
+
+| Region, harvests | Index | AUC, loss > 10% | Basis risk |
+| --- | --- | --- | --- |
+| RS + PR, 2024+2025 | Rainfall index | 0.563 | 0.505 |
+| RS + PR, 2024+2025 | NDVI only | 0.606 | 0.422 |
+| RS + PR, 2024+2025 | **Turgor full** | **0.695** | **0.342** |
+| RS, 2024+2025 | Rainfall index | 0.777 | 0.231 |
+| RS, 2024+2025 | **Turgor full** | **0.808** | **0.203** |
+| PR, 2024+2025 | Rainfall index | 0.575 | 0.509 |
+| PR, 2024+2025 | **Turgor full** | **0.656** | **0.495** |
+
+- On new seasons the index **misses 32% fewer real losses** than the rainfall trigger (basis risk 0.51 to 0.34).
+- The 2025 RS drought (yield 34% below trend) ranks in the top 12% of stress since 2001.
+- Skill is lower than in the backtest (AUC 0.70 vs 0.83). Two seasons is a small sample, and part of the 2024 RS loss came from the May 2024 floods at harvest, which no drought index should flag.
+
+![Holdout](figures/fig7_holdout_2024_2025.png)
+
+### 2. Confidence intervals (2001-2023 backtest)
+
+95% intervals from 1,000 bootstrap resamples of whole harvest years. Municipalities in the same season share weather, so rows are not independent. `results/v1_ci.csv`.
+
+| Region | Metric | Rainfall index | Turgor full | Difference (95% CI) | Turgor better in |
+| --- | --- | --- | --- | --- | --- |
+| RS + PR | AUC | 0.784 (0.70-0.84) | 0.828 (0.77-0.87) | +0.044 (-0.003 to +0.107) | 96% of resamples |
+| RS + PR | Basis risk | 0.44 (0.33-0.61) | 0.37 (0.29-0.51) | -0.067 (-0.16 to +0.01) | 95% |
+| RS + PR | State-year r | 0.68 (0.52-0.78) | 0.88 (0.76-0.93) | +0.19 (+0.09 to +0.32) | >99% |
+| PR | Basis risk | 0.60 (0.47-0.81) | 0.46 (0.38-0.60) | -0.14 (-0.26 to -0.05) | >99% |
+| RS | Basis risk | 0.31 (0.20-0.48) | 0.30 (0.21-0.46) | -0.01 (-0.12 to +0.12) | 55% |
+
+- **Paraná: the gain is clear** on every metric. **RS + PR: borderline** at the municipality level, clear at the portfolio (state-year) level.
+- **Rio Grande do Sul: no clear gain** over rainfall at the municipality level. RS droughts are rainfall droughts, so a rainfall index already works there; the gain in RS is in portfolio correlation and in lead time (below).
+
+### 3. How early it warns
+
+The index rebuilt as it would have looked on each date, using only data available then: weather 3 days late, MODIS 16-day composites 23 days late, and each municipality's typical stage windows (median of its other seasons), since the current season's stages are not known yet. `results/early_warning.csv`.
+
+| Data up to | Turgor AUC (RS + PR) | Rainfall index AUC | Turgor basis risk |
+| --- | --- | --- | --- |
+| 1 Dec | 0.52 | no signal yet | |
+| 1 Jan | 0.74 | no signal yet | 0.49 |
+| 15 Jan | **0.79** | 0.70 | 0.41 |
+| 1 Feb | 0.79 | 0.67 | 0.42 |
+| 1 Mar | 0.85 | 0.78 | 0.35 |
+| 15 Mar onward | 0.86 | 0.78 | 0.33 |
+
+- **By 15 January the index already matches the rainfall index's end-of-season skill** (0.78), about 6 weeks earlier. In PR it beats the final rainfall index from 1 January.
+- Typical harvest is late Feb-March in PR and March-April in RS, so a usable warning comes **8-12 weeks before harvest**.
+- On the 2024-2025 holdout the same holds: by 1 January AUC 0.68 (rainfall: no signal), by 15 February 0.71 vs 0.68.
+- The real-time version with typical windows ends the season at AUC 0.86, higher than the full-season version with each season's own satellite windows (0.83). In a drought the NDVI peak comes early and low, which shifts the season's own window; a fixed window keeps the collapse inside it. The product should use typical windows.
+
+![Early warning](figures/fig6_early_warning.png)
+
+### 4. Field yields: ready for a co-op pilot
+
+Real field yields are not public, so this step needs a partner. Everything is ready:
+
+- `scripts/13_field_validation.py`: takes the partner's field polygons and yields per field and season, reads each field's Sentinel-2 curve and stages, adds weather at the field, and compares the field index with the municipal index on the same field-seasons (AUC, basis risk, within-season ranking of fields).
+- `python scripts/13_field_validation.py --demo` runs it end to end on 4 pilot plots with **synthetic** yields (a pipeline test, not a result).
+- `docs/pilot_data_request_pt.md`: the one-page data request for co-ops (in Portuguese).
 
 ---
 
@@ -146,6 +213,14 @@ python scripts/04_download_modis.py --states RS PR
 python scripts/05_download_power.py --states RS PR
 python scripts/06_full_index.py
 python scripts/03_figures.py
+# validation round
+python scripts/10_confidence_intervals.py               # year-block bootstrap
+python scripts/11_early_warning.py                      # skill by date
+python scripts/04_download_modis.py --states RS --first 2024 --last 2025   # then PR
+python scripts/09_extend_weather.py                     # POWER to May 2025
+python scripts/12_holdout_2024_2025.py                  # needs apisidra.ibge.gov.br
+python scripts/14_validation_figures.py
+python scripts/13_field_validation.py --fields F.geojson --yields Y.csv   # co-op pilot
 pytest -q                                                 # offline tests
 ```
 
@@ -172,7 +247,8 @@ tests/        offline tests (synthetic NDVI and weather)
 - The summer-crop mask can drop the worst-hit pixels in severe droughts (low amplitude), which may understate NDVI losses in those years.
 - Stage windows use fixed offsets around the NDVI peak; calibrating them on field phenology (e.g. Embrapa trials) is the next step.
 - Municipal yields average many farms; field-level skill needs pilot data from cooperatives.
-- Harvests end in 2023 in the current panel. The 2024/25 drought in RS is not yet included.
+- The 2024-2025 holdout covers only two seasons; it will grow by one season a year.
+- In Rio Grande do Sul the index does not clearly beat a rainfall index at the municipality level (see confidence intervals).
 
 ## License and credit
 

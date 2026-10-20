@@ -1,0 +1,94 @@
+asof,region,index,n,auc_loss,basis_risk,state_year_r
+12-01,RS + PR,Turgor index (as of date),17342,0.517,0.16,0.031
+12-01,RS + PR,Turgor weather only (as of date),17342,0.515,0.163,0.025
+12-01,RS + PR,Rainfall index (as of date),17342,0.5,0.0,
+12-01,RS,Turgor index (as of date),8996,0.505,0.023,0.147
+12-01,RS,Turgor weather only (as of date),8996,0.505,0.023,0.148
+12-01,RS,Rainfall index (as of date),8996,0.5,0.0,
+12-01,PR,Turgor index (as of date),8346,0.509,0.363,0.075
+12-01,PR,Turgor weather only (as of date),8346,0.507,0.37,0.06
+12-01,PR,Rainfall index (as of date),8346,0.5,0.0,
+12-15,RS + PR,Turgor index (as of date),17342,0.596,0.216,0.246
+12-15,RS + PR,Turgor weather only (as of date),17342,0.597,0.223,0.244
+12-15,RS + PR,Rainfall index (as of date),17342,0.5,0.0,
+12-15,RS,Turgor index (as of date),8996,0.534,0.054,0.493
+12-15,RS,Turgor weather only (as of date),8996,0.535,0.054,0.492
+12-15,RS,Rainfall index (as of date),8996,0.5,0.0,
+12-15,PR,Turgor index (as of date),8346,0.63,0.618,0.592
+12-15,PR,Turgor weather only (as of date),8346,0.63,0.616,0.586
+12-15,PR,Rainfall index (as of date),8346,0.5,0.0,
+01-01,RS + PR,Turgor index (as of date),17342,0.738,0.486,0.446
+01-01,RS + PR,Turgor weather only (as of date),17342,0.727,0.483,0.44
+01-01,RS + PR,Rainfall index (as of date),17342,0.5,0.0,
+01-01,RS,Turgor index (as of date),8996,0.73,0.431,0.524
+01-01,RS,Turgor weather only (as of date),8996,0.724,0.434,0.522
+01-01,RS,Rainfall index (as of date),8996,0.5,0.0,
+01-01,PR,Turgor index (as of date),8346,0.755,0.49,0.802
+01-01,PR,Turgor weather only (as of date),8346,0.734,0.505,0.776
+01-01,PR,Rainfall index (as of date),8346,0.5,0.0,
+01-15,RS + PR,Turgor index (as of date),17342,0.785,0.408,0.576
+01-15,RS + PR,Turgor weather only (as of date),17342,0.756,0.435,0.542
+01-15,RS + PR,Rainfall index (as of date),17342,0.697,0.503,0.534
+01-15,RS,Turgor index (as of date),8996,0.811,0.348,0.744
+01-15,RS,Turgor weather only (as of date),8996,0.777,0.361,0.687
+01-15,RS,Rainfall index (as of date),8996,0.746,0.435,0.566
+01-15,PR,Turgor index (as of date),8346,0.766,0.487,0.826
+01-15,PR,Turgor weather only (as of date),8346,0.74,0.52,0.776
+01-15,PR,Rainfall index (as of date),8346,0.629,0.576,0.532
+02-01,RS + PR,Turgor index (as of date),17342,0.793,0.422,0.703
+02-01,RS + PR,Turgor weather only (as of date),17342,0.756,0.458,0.642
+02-01,RS + PR,Rainfall index (as of date),17342,0.666,0.582,0.451
+02-01,RS,Turgor index (as of date),8996,0.823,0.356,0.772
+02-01,RS,Turgor weather only (as of date),8996,0.778,0.394,0.702
+02-01,RS,Rainfall index (as of date),8996,0.747,0.446,0.585
+02-01,PR,Turgor index (as of date),8346,0.762,0.488,0.801
+02-01,PR,Turgor weather only (as of date),8346,0.733,0.538,0.724
+02-01,PR,Rainfall index (as of date),8346,0.565,0.736,0.2
+02-15,RS + PR,Turgor index (as of date),17342,0.818,0.382,0.765
+02-15,RS + PR,Turgor weather only (as of date),17342,0.779,0.428,0.678
+02-15,RS + PR,Rainfall index (as of date),17342,0.76,0.472,0.63
+02-15,RS,Turgor index (as of date),8996,0.84,0.341,0.793
+02-15,RS,Turgor weather only (as of date),8996,0.794,0.381,0.707
+02-15,RS,Rainfall index (as of date),8996,0.844,0.349,0.724
+02-15,PR,Turgor index (as of date),8346,0.795,0.418,0.855
+02-15,PR,Turgor weather only (as of date),8346,0.763,0.493,0.756
+02-15,PR,Rainfall index (as of date),8346,0.663,0.592,0.484
+03-01,RS + PR,Turgor index (as of date),17342,0.847,0.35,0.824
+03-01,RS + PR,Turgor weather only (as of date),17342,0.812,0.402,0.754
+03-01,RS + PR,Rainfall index (as of date),17342,0.782,0.448,0.688
+03-01,RS,Turgor index (as of date),8996,0.873,0.315,0.859
+03-01,RS,Turgor weather only (as of date),8996,0.835,0.36,0.815
+03-01,RS,Rainfall index (as of date),8996,0.856,0.298,0.77
+03-01,PR,Turgor index (as of date),8346,0.819,0.393,0.851
+03-01,PR,Turgor weather only (as of date),8346,0.787,0.475,0.762
+03-01,PR,Rainfall index (as of date),8346,0.693,0.613,0.577
+03-15,RS + PR,Turgor index (as of date),17342,0.861,0.342,0.856
+03-15,RS + PR,Turgor weather only (as of date),17342,0.825,0.395,0.788
+03-15,RS + PR,Rainfall index (as of date),17342,0.783,0.438,0.682
+03-15,RS,Turgor index (as of date),8996,0.892,0.281,0.901
+03-15,RS,Turgor weather only (as of date),8996,0.854,0.342,0.862
+03-15,RS,Rainfall index (as of date),8996,0.858,0.293,0.764
+03-15,PR,Turgor index (as of date),8346,0.825,0.385,0.854
+03-15,PR,Turgor weather only (as of date),8346,0.79,0.466,0.769
+03-15,PR,Rainfall index (as of date),8346,0.694,0.619,0.575
+04-01,RS + PR,Turgor index (as of date),17342,0.862,0.333,0.862
+04-01,RS + PR,Turgor weather only (as of date),17342,0.825,0.383,0.788
+04-01,RS + PR,Rainfall index (as of date),17342,0.783,0.438,0.682
+04-01,RS,Turgor index (as of date),8996,0.897,0.262,0.912
+04-01,RS,Turgor weather only (as of date),8996,0.857,0.328,0.865
+04-01,RS,Rainfall index (as of date),8996,0.858,0.293,0.764
+04-01,PR,Turgor index (as of date),8346,0.822,0.393,0.853
+04-01,PR,Turgor weather only (as of date),8346,0.787,0.471,0.769
+04-01,PR,Rainfall index (as of date),8346,0.694,0.619,0.575
+04-15,RS + PR,Turgor index (as of date),17342,0.862,0.332,0.863
+04-15,RS + PR,Turgor weather only (as of date),17342,0.825,0.383,0.788
+04-15,RS + PR,Rainfall index (as of date),17342,0.783,0.438,0.682
+04-15,RS,Turgor index (as of date),8996,0.896,0.262,0.913
+04-15,RS,Turgor weather only (as of date),8996,0.857,0.328,0.866
+04-15,RS,Rainfall index (as of date),8996,0.858,0.293,0.764
+04-15,PR,Turgor index (as of date),8346,0.821,0.394,0.853
+04-15,PR,Turgor weather only (as of date),8346,0.786,0.474,0.769
+04-15,PR,Rainfall index (as of date),8346,0.694,0.619,0.575
+end,RS + PR,Turgor index (full season),17342,0.828,0.373,0.875
+end,RS,Turgor index (full season),8996,0.871,0.304,0.922
+end,PR,Turgor index (full season),8346,0.775,0.463,0.864

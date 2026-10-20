@@ -91,3 +91,33 @@ def test_basis_risk_perfect_and_random():
     rng = np.random.default_rng(1)
     br = np.mean([trigger_basis_risk(rng.random(100), loss)["basis_risk"] for _ in range(200)])
     assert 0.7 < br < 0.9
+
+
+def test_field_validation_synthetic():
+    """Field index should rank synthetic fields whose yield follows reproductive NDVI."""
+    import numpy as np
+    import pandas as pd
+    from ssi.fieldval import field_index, validate, yield_anomaly
+    rng = np.random.default_rng(1)
+    rows = []
+    for f in range(30):
+        for yr in range(2018, 2025):
+            nd = rng.normal(0.8, 0.06)
+            wd = rng.normal(100, 30)
+            rows.append({"field_id": f"F{f}", "harvest_year": yr, "ndvi_vegetative": rng.normal(0.7, 0.05),
+                         "ndvi_reproductive": nd, "veg_water_deficit_mm": rng.normal(50, 15),
+                         "win_water_deficit_mm": wd, "veg_edd": rng.normal(10, 3), "win_edd": rng.normal(20, 5),
+                         "yield_kg_ha": 3500 + 4000 * (nd - 0.8) - 5 * (wd - 100) + rng.normal(0, 120)})
+    d = yield_anomaly(pd.DataFrame(rows))
+    d["field_index"] = field_index(d).values
+    res = validate(d, {"field": "field_index"})
+    assert res.loc[0, "auc_loss"] > 0.75
+
+
+def test_reference_z_uses_training_rows_only():
+    import numpy as np
+    import pandas as pd
+    from ssi.index import local_z
+    df = pd.DataFrame({"fips5": [1] * 5, "x": [1.0, 2.0, 3.0, 4.0, 100.0]})
+    z = local_z(df, "x", ref=np.array([True, True, True, True, False]))
+    assert abs(z.iloc[0] + 1.162) < 0.01 and z.iloc[4] > 70
