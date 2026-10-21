@@ -121,3 +121,23 @@ def test_reference_z_uses_training_rows_only():
     df = pd.DataFrame({"fips5": [1] * 5, "x": [1.0, 2.0, 3.0, 4.0, 100.0]})
     z = local_z(df, "x", ref=np.array([True, True, True, True, False]))
     assert abs(z.iloc[0] + 1.162) < 0.01 and z.iloc[4] > 70
+
+
+def test_zarc_table_and_scores(tmp_path):
+    import pandas as pd
+    from ssi.zarc import decendio, load_table, risk_lookup, zarc_scores
+    assert decendio("2023-01-05") == 1 and decendio("2023-10-25") == 30 and decendio("2023-12-31") == 36
+    head = ["Nome_cultura", "SafraIni", "SafraFin", "Cod_Cultura", "Cod_Ciclo", "Cod_Solo", "geocodigo", "UF", "municipio"]
+    decs = [f"dec{i}" for i in range(1, 37)]
+    rows = []
+    for ciclo, risk_oct3 in [(1, 30), (2, 20)]:
+        r = ["Soja", 2022, 2023, 1, ciclo, "AD2", 4300034, "RS", "Acegua"] + [0] * 36
+        r[len(head) + 29] = risk_oct3      # dec30 = 21-31 Oct
+        rows.append(r)
+    fp = tmp_path / "t.csv"
+    pd.DataFrame(rows, columns=head + decs).to_csv(fp, sep=";", index=False)
+    lk = risk_lookup({2022: load_table(fp)})
+    s = pd.DataFrame({"fips5": [4300034, 4300034], "year": [2023, 2023],
+                      "green_up": ["2022-11-15", "2023-01-20"]})
+    out = zarc_scores(s, lk).tolist()
+    assert out == [20.0, 50.0]   # sown ~26 Oct -> best cycle 20%; sown ~31 Dec -> not indicated

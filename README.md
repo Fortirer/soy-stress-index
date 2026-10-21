@@ -14,13 +14,16 @@ The index scores each municipality and season for water deficit, extreme heat an
 
 | Region | Index | AUC, loss > 10% | State-year r | Basis risk |
 | --- | --- | --- | --- | --- |
+| RS + PR | ZARC risk class (official zoning) | 0.573 | 0.41 | 0.64 |
 | RS + PR | Rainfall index | 0.784 | 0.68 | 0.44 |
 | RS + PR | SSI v0 (calendar windows) | 0.791 | 0.71 | 0.46 |
 | RS + PR | NDVI only | 0.773 | 0.85 | 0.44 |
 | RS + PR | SSI v1, weather by satellite stage | 0.786 | 0.79 | 0.44 |
 | RS + PR | **SSI v1 full (+ NDVI)** | **0.828** | **0.88** | **0.37** |
+| RS | ZARC risk class | 0.584 | 0.51 | 0.60 |
 | RS | Rainfall index | 0.857 | 0.76 | 0.31 |
 | RS | **SSI v1 full** | **0.871** | **0.92** | **0.30** |
+| PR | ZARC risk class | 0.535 | 0.49 | 0.73 |
 | PR | Rainfall index | 0.696 | 0.58 | 0.60 |
 | PR | **SSI v1 full** | **0.775** | **0.86** | **0.46** |
 
@@ -44,11 +47,14 @@ These two harvests were never used to build the index. Yields come fresh from IB
 
 | Region, harvests | Index | AUC, loss > 10% | Basis risk |
 | --- | --- | --- | --- |
+| RS + PR, 2024+2025 | ZARC risk class | 0.571 | 0.462 |
 | RS + PR, 2024+2025 | Rainfall index | 0.563 | 0.505 |
 | RS + PR, 2024+2025 | NDVI only | 0.606 | 0.422 |
 | RS + PR, 2024+2025 | **Turgor full** | **0.695** | **0.342** |
+| RS, 2024+2025 | ZARC risk class | 0.541 | 0.381 |
 | RS, 2024+2025 | Rainfall index | 0.777 | 0.231 |
 | RS, 2024+2025 | **Turgor full** | **0.808** | **0.203** |
+| PR, 2024+2025 | ZARC risk class | 0.607 | 0.563 |
 | PR, 2024+2025 | Rainfall index | 0.575 | 0.509 |
 | PR, 2024+2025 | **Turgor full** | **0.656** | **0.495** |
 
@@ -93,7 +99,28 @@ The index rebuilt as it would have looked on each date, using only data availabl
 
 ![Early warning](figures/fig6_early_warning.png)
 
-### 4. Field yields: ready for a co-op pilot
+### 4. ZARC: what the market uses today
+
+ZARC (Zoneamento Agrícola de Risco Climático, MAPA/Embrapa) is the official zoning that rural credit and subsidised insurance require. It gives, per municipality, soil class, cycle and 10-day sowing window, a risk class of 20, 30 or 40% of crop failure; windows not listed are "not indicated" (scored here as 50%).
+
+ZARC score per municipality-season: sowing date = NDVI green-up minus 20 days; soil class AD2 (soil type 2 in tables before 2023/24); the lowest-risk cycle available; the ZARC table of that safra (MAPA open data, safras 2017/18 to 2025/26; harvests before 2018 use the 2017/18 table). `scripts/15_zarc_baseline.py`, `results/baselines_ci.csv`, `results/zarc_scores.csv.gz`.
+
+| Test | Region | Turgor full | ZARC | Rainfall | NDVI only | Turgor minus ZARC, AUC (95% CI) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Backtest 2001-2023, AUC | RS + PR | **0.828** | 0.573 | 0.784 | 0.773 | +0.26 (+0.20 to +0.31) |
+| Backtest 2001-2023, AUC | RS | **0.871** | 0.584 | 0.857 | 0.829 | +0.29 (+0.22 to +0.35) |
+| Backtest 2001-2023, AUC | PR | **0.775** | 0.535 | 0.696 | 0.705 | +0.24 (+0.18 to +0.30) |
+| Backtest, basis risk | RS + PR | **0.37** | 0.64 | 0.44 | 0.44 | |
+| Holdout 2024-2025, AUC | RS + PR | **0.698** | 0.571 | 0.566 | 0.608 | +0.13 (+0.09 to +0.16)* |
+| Holdout, basis risk | RS + PR | **0.34** | 0.46 | 0.50 | 0.42 | |
+
+\* Holdout intervals resample municipalities (only two seasons), so they are narrower than the year-resampled backtest intervals. Turgor beats ZARC in every region of the backtest (100% of resamples) and in the RS and RS + PR holdout. In the PR holdout the gain is borderline: AUC +0.05 (-0.01 to +0.12), basis risk 0.49 vs 0.56.
+
+- **ZARC barely separates loss seasons from normal ones** (AUC 0.54-0.61). It is a pre-season, static zoning: it says where and when sowing is risky, not how this season is going. On 2018-2023 alone, where each safra has its own table, ZARC reaches 0.62 against 0.85 for Turgor.
+- ZARC still carries some portfolio signal (state-year r 0.41), possibly because dry springs delay sowing into riskier windows (not tested).
+- Read this as "Turgor adds in-season information on top of the zoning lenders already use", not "ZARC is wrong": ZARC answers a different, pre-season question and remains an input.
+
+### 5. Field yields: ready for a co-op pilot
 
 Real field yields are not public, so this step needs a partner. Everything is ready:
 
@@ -220,6 +247,7 @@ python scripts/04_download_modis.py --states RS --first 2024 --last 2025   # the
 python scripts/09_extend_weather.py                     # POWER to May 2025
 python scripts/12_holdout_2024_2025.py                  # needs apisidra.ibge.gov.br
 python scripts/14_validation_figures.py
+python scripts/15_zarc_baseline.py --offline          # ZARC tables in data/zarc/ (MAPA open data)
 python scripts/13_field_validation.py --fields F.geojson --yields Y.csv   # co-op pilot
 pytest -q                                                 # offline tests
 ```
