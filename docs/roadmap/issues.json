@@ -1,0 +1,146 @@
+{
+  "project_title": "Turgor – 90-day validation (to mid-Jan 2027)",
+  "project_description": "Answer the three early questions by mid-January 2027: does the model beat the baselines, does it run without farm sensors, and will someone pay per hectare? Source: Crop Stress & Climate Risk Startup – Business Overview (Oct 2026).",
+  "labels": [
+    {"name": "science", "color": "1E5B3A", "description": "Model, data, backtests"},
+    {"name": "market", "color": "2A78D6", "description": "Customers, interviews, pricing, competitors"},
+    {"name": "company", "color": "8A5A2B", "description": "Founders, IP, legal, team"},
+    {"name": "funding", "color": "B4541A", "description": "FAPESP PIPE, Centelha, Sebrae, incubators"},
+    {"name": "product", "color": "6FA884", "description": "Demo, monitor, API, reports"},
+    {"name": "pitch", "color": "7A6FB0", "description": "Events, deck, one-pager"},
+    {"name": "blocked", "color": "999999", "description": "Waiting on data or a person"},
+    {"name": "priority: high", "color": "D73A4A", "description": "Needed before mid-January decision"}
+  ],
+  "milestones": [
+    {"title": "Weeks 1-4: start (to 15 Nov 2026)", "due_on": "2026-11-15T23:59:59Z",
+     "description": "Founder rules checked, first interviews, hackathon, real-time index."},
+    {"title": "Weeks 5-8: prove (to 13 Dec 2026)", "due_on": "2026-12-13T23:59:59Z",
+     "description": "Demo interviews, ZARC baseline, live monitor, co-op data pilot."},
+    {"title": "Weeks 9-12: decide (to 15 Jan 2027)", "due_on": "2027-01-15T23:59:59Z",
+     "description": "Kill-criteria review, Lean Canvas, PIPE Phase 1 draft."},
+    {"title": "MVP (first 6 months)", "due_on": "2027-04-30T23:59:59Z",
+     "description": "Weekly stress index + expected loss per field or municipality, portfolio report for one co-op, public backtest."}
+  ],
+  "issues": [
+    {
+      "title": "[Done] First stage-weighted stress index from Sentinel-2, MODIS and weather",
+      "labels": ["science"], "milestone": "Weeks 1-4: start (to 15 Nov 2026)", "state": "closed",
+      "body": "Business Overview → 90-day plan → Science.\n\n**Done.** Code in this repo (`ssi/`, scripts 01-08).\n\n- MODIS NDVI (2001-2025) over summer-crop pixels; crop stages read from each season's NDVI curve.\n- NASA POWER daily weather: water deficit, heat above 30 °C, heat × dry, summed by stage.\n- SSI = 0.25 × vegetative + 0.75 × reproductive stress, physiology priors (no fitted weights).\n- Sentinel-2 field pilot: 15 plots in Dom Pedrito, Cruz Alta, Tupanciretã (2021 vs 2022).\n\nAnswers early question 2: **it runs without farm sensors.**"
+    },
+    {
+      "title": "[Done] Backtest RS and PR, incl. 2021/22 and 2024/25, against IBGE yields and NDVI",
+      "labels": ["science"], "milestone": "Weeks 1-4: start (to 15 Nov 2026)", "state": "closed",
+      "body": "Business Overview → 90-day plan → Science: backtest 2021/22 and 2024/25; compare with NDVI anomalies.\n\n**Done** (see README, `results/`).\n\n| Test | Turgor | Rainfall index | NDVI only |\n|---|---|---|---|\n| Backtest 2001-2023, AUC | 0.828 | 0.784 | 0.773 |\n| Backtest basis risk | 0.37 | 0.44 | 0.44 |\n| Holdout 2024+2025, AUC | 0.695 | 0.563 | 0.606 |\n| Holdout basis risk | 0.34 | 0.51 | 0.42 |\n\n- 2021/22 drought: top-ranked stress year in RS and PR.\n- 2024/25 RS drought (-34% vs trend): top 12% since 2001.\n- Year-bootstrap 95% CIs: clear gain in PR and at portfolio level; **no clear gain in RS at municipality level**.\n- Early warning: by 15 Jan matches the rainfall index's end-of-season skill (8-12 weeks before harvest).\n\nKill criterion \"index does not beat NDVI anomalies\": **not triggered**."
+    },
+    {
+      "title": "Compare with ZARC risk classes on the same municipalities",
+      "labels": ["science", "priority: high"], "milestone": "Weeks 5-8: prove (to 13 Dec 2026)",
+      "body": "Business Overview → 90-day plan → Science: *Compare with NDVI anomalies and ZARC risk classes.* NDVI is done; ZARC is still open. ZARC is the official baseline lenders and insurers know, so beating it is part of the PIPE scientific question.\n\n**Tasks**\n- [ ] Download ZARC soybean tables for RS and PR (MAPA / Painel de Indicação de Riscos – dados abertos): risk class (20/30/40%) by municipality, soil type, cycle and 10-day sowing window.\n- [ ] For each municipality-season, assign the ZARC risk of the actual sowing window (from the NDVI green-up date minus ~20 days) and soil type AD2 as default.\n- [ ] Score ZARC as a baseline in `scripts/06` and `scripts/12` (backtest + 2024/25 holdout); add CIs with `ssi/uncertainty.py`.\n- [ ] Add a row to the README tables.\n\n**Done when**: metrics table Turgor vs ZARC vs rainfall vs NDVI, with 95% CIs, is in `results/` and the README.\n\nNote: ZARC is a static, pre-season risk class, so expect it to be weak in-season. Report it honestly as \"what the market uses today\"."
+    },
+    {
+      "title": "Make the real-time version (typical stage windows) the product index",
+      "labels": ["science", "product"], "milestone": "Weeks 1-4: start (to 15 Nov 2026)",
+      "body": "The early-warning test (`scripts/11_early_warning.py`) showed that the real-time index, built with each municipality's typical stage windows and real data latency, ends the season at **AUC 0.86** vs **0.83** for the version with each season's own satellite windows. In droughts the NDVI peak comes early and low, which shifts the season's own window.\n\n**Tasks**\n- [ ] Move the as-of logic in `ssi/early.py` into a single `turgor_index(asof=...)` function.\n- [ ] Re-run backtest, CIs (`scripts/10`) and holdout (`scripts/12`) with it.\n- [ ] Update README headline numbers.\n\n**Done when**: one index definition is used everywhere and all tables come from it."
+    },
+    {
+      "title": "Live monitor for the 2026/27 season (RS + PR, weekly)",
+      "labels": ["product", "priority: high"], "milestone": "Weeks 5-8: prove (to 13 Dec 2026)",
+      "body": "The strongest demo for interviews and the hackathon: a stress map of **this** season, updated weekly from 1 December.\n\n**Tasks**\n- [ ] Script `15_monitor.py --asof YYYY-MM-DD`: pulls the latest MODIS composites and POWER days, computes the real-time index per municipality.\n- [ ] Output a map (PNG + GeoJSON) and a table of the 20 most stressed municipalities, with expected loss once the expected-loss issue is done.\n- [ ] Schedule it weekly (GitHub Action or cloud scheduled task) Dec 2026 – Apr 2027.\n- [ ] Keep each week's output, so the season becomes a live, timestamped track record.\n\n**Done when**: the 1 Dec 2026 map is published and updates weekly.\n\nWhy it matters: a forecast written down *before* harvest is the most credible proof for insurers and lenders."
+    },
+    {
+      "title": "Expected yield-loss estimate (%) per municipality, not only an index",
+      "labels": ["science", "product"], "milestone": "MVP (first 6 months)",
+      "body": "MVP scope in the Business Overview: *a weekly stress index and expected-loss estimate per field or municipality.* Buyers price risk in % loss or R$, not in z-scores.\n\n**Tasks**\n- [ ] Map index → expected relative yield anomaly with a monotone model (isotonic or quantile regression), leave-one-year-out.\n- [ ] Report calibration: predicted vs observed loss by decile; P(loss > 10%) as a probability.\n- [ ] Convert to R$/ha using Conab prices for portfolio reports.\n\n**Done when**: each municipality-season has expected loss % and P(loss>10%) with a calibration plot."
+    },
+    {
+      "title": "Improve skill in Rio Grande do Sul (soy mask, 250 m, better rain)",
+      "labels": ["science"], "milestone": "MVP (first 6 months)",
+      "body": "Year-bootstrap CIs show **no clear gain over a rainfall index in RS at municipality level** (basis risk 0.30 vs 0.31). RS is where the biggest losses are, so this matters for the pitch.\n\n**Ideas to test, one at a time, with CIs**\n- [ ] Soybean-only mask from MapBiomas (removes maize and rice from the MODIS signal).\n- [ ] Read MODIS at full 250 m instead of ~1 km.\n- [ ] Rain from CHIRPS (or ERA5) instead of NASA POWER; Arbol's `gridded-etl-tools` (MIT) can be the pipeline.\n- [ ] Add VPD by stage.\n\n**Done when**: RS basis-risk difference vs rainfall has a 95% CI below zero, or we document that it can't be done and sell RS on early warning."
+    },
+    {
+      "title": "Calibrate the stress response with eCO2 × drought × warming experiments and the meta-analysis",
+      "labels": ["science", "funding"], "milestone": "MVP (first 6 months)",
+      "body": "This is the scientific moat and the core of the PIPE proposal: the model should encode how soybean photosynthesis, carbohydrate allocation and yield respond to water deficit, heat and rising CO2.\n\n**Tasks**\n- [ ] From the meta-analysis: response curves of photosynthesis and NSC to drought and temperature, by stage.\n- [ ] From the pot and field experiments: stage-specific sensitivity weights (replace the 0.25 / 0.75 priors with measured ones).\n- [ ] Test: do the calibrated weights beat the priors in the backtest and holdout?\n- [ ] Check data ownership (USP thesis data) before using it in the product, see the founder-role issue.\n\n**Done when**: a calibrated version is backtested and the result is written up for the PIPE proposal."
+    },
+    {
+      "title": "Field-level validation with a co-op's real yields",
+      "labels": ["science", "market", "blocked", "priority: high"], "milestone": "Weeks 5-8: prove (to 13 Dec 2026)",
+      "body": "Field yields are not public, so this needs a partner. Everything else is ready.\n\n**Ready**\n- `scripts/13_field_validation.py --fields fields.geojson --yields yields.csv` (tested end to end with `--demo`).\n- `docs/pilot_data_request_pt.md`: one-page data request for co-ops (Portuguese).\n\n**Tasks**\n- [ ] Get field polygons (CAR or co-op) + yields per field for ≥3 seasons 2018-2025, 50-300 fields, ideally incl. 2021/22 or 2024/25.\n- [ ] Sign a simple data / confidentiality agreement (LGPD).\n- [ ] Run the script; compare field index vs municipal index vs rainfall.\n- [ ] Deliver a 2-page report to the co-op within 2 weeks and ask for a letter of intent.\n\n**Done when**: field AUC and basis risk vs the municipal index are measured on real yields.\n\nBlocked on: a co-op partner (see the interviews issue)."
+    },
+    {
+      "title": "Publish the backtest as a public report (sales argument)",
+      "labels": ["science", "pitch"], "milestone": "MVP (first 6 months)",
+      "body": "Business Overview: *Accuracy published and audited – a public backtest is the sales argument.* N Scout lesson: report held-out metrics separately from the demo.\n\n**Tasks**\n- [ ] 4-6 page report (PT and EN): method, backtest, CIs, 2024/25 holdout, early warning, limits (RS, floods 2024).\n- [ ] Include the weaknesses openly.\n- [ ] Invite one external reviewer (crop modeler or actuary).\n\n**Done when**: the report is public and linked from the README and the pitch."
+    },
+    {
+      "title": "Customer interviews: 15 targets (5 co-ops, 4 resellers, 3 insurers, 3 credit managers)",
+      "labels": ["market", "priority: high"], "milestone": "Weeks 5-8: prove (to 13 Dec 2026)",
+      "body": "Answers early question 3: **will someone pay per hectare?**\n\n**Targets** (RS and PR): co-ops' credit and agronomy heads (e.g. Coamo, C.Vale, Cotrijal, Cocamar, Agrária); input resellers financing farmers (barter, CPR); insurers/insurtechs; rural credit managers (Sicredi, Cresol, Banco do Brasil, BRDE).\n\n**Tasks**\n- [ ] List 30 names by role; ask for warm intros (advisor, Embrapa, USP alumni).\n- [ ] Interview log: who, segment, top problems, current workaround and its cost, quotes, next step.\n- [ ] Rounds: 10 problem interviews by 8 Nov; 5 demo interviews late Nov.\n- [ ] Script: past behaviour only (2022 and 2025 droughts: when did you know, what did it cost, what do you use today). No \"would you buy\".\n- [ ] Score the hypotheses: problem, buyer, value, price, data.\n\n**Done when**: 15 interviews logged and the buyer segment is chosen."
+    },
+    {
+      "title": "Test pricing: R$ per hectare per season",
+      "labels": ["market"], "milestone": "Weeks 9-12: decide (to 15 Jan 2027)",
+      "body": "Hypotheses from the Business Overview (to test, not to state):\n\n| Stream | Customer | Hypothesis |\n|---|---|---|\n| Risk score | Co-ops, resellers, lenders | R$ 2-6 / ha / season |\n| Stress alerts | Co-ops, agronomists | R$ 1-3 / ha / season |\n| Parametric trigger licence | Insurers | 1-3% of premium |\n| Backtest studies | Banks, insurers | R$ 30-100 k / study |\n\n**Tasks**\n- [ ] In demo interviews, ask what they spend today on inspections, risk data and claims handling; let them name a number first.\n- [ ] Record willingness to pay and who signs the budget.\n- [ ] Stress-test: one co-op with 200,000 ha × R$ 3 = R$ 600 k / year.\n\n**Done when**: a price range named by ≥3 buyers is documented."
+    },
+    {
+      "title": "Get ≥3 letters of intent or paid pilots (kill criterion)",
+      "labels": ["market", "priority: high"], "milestone": "Weeks 9-12: decide (to 15 Jan 2027)",
+      "body": "Kill criterion in the Business Overview: **fewer than 3 organisations agree to a paid pilot or a letter of intent → stop or rethink.**\n\n**Tasks**\n- [ ] Offer a free backtest on their own portfolio (fields or municipalities) in exchange for data.\n- [ ] One-page letter of intent template: interest in a paid pilot for 2027/28, expected price range, data to share.\n- [ ] Track: contacted → interested → data shared → LOI.\n\n**Done when**: 3 signed LOIs or paid pilots, or the stop/rethink decision is taken."
+    },
+    {
+      "title": "Study Trag and Guarda in detail; contact them as partners or customers",
+      "labels": ["market"], "milestone": "Weeks 1-4: start (to 15 Nov 2026)",
+      "body": "Trag (insurtech, 2024, R$ 2 M round) is the closest competitor: same customers, similar promise. Guarda (parametric insurance, R$ 4.5 M pre-seed Dec 2025) is a possible customer for a better trigger.\n\n**Tasks**\n- [ ] For each: product, customers, pricing, team, investors, data sources, public claims of accuracy.\n- [ ] Where Turgor is better (stage-specific physiology, published backtest, early warning) and where it is not.\n- [ ] Contact Guarda about licensing the index as a trigger; decide whether to approach Trag as partner.\n- [ ] Also map Visiona + Agrotools, Traive, SciCrop, Agrosmart briefly.\n\n**Done when**: a 1-page battlecard per competitor and one conversation each with Guarda and Trag."
+    },
+    {
+      "title": "Contact Arbol as a possible buyer or partner for a Brazilian soybean trigger",
+      "labels": ["market"], "milestone": "Weeks 5-8: prove (to 13 Dec 2026)",
+      "body": "Business Overview action: *add Arbol to the 90-day interview list.* Arbol underwrites parametric climate risk (US$ 60 M Series B, 2024) and said it would expand into agricultural risk transfer. Basis risk is its weak point; Turgor's lower basis risk is the pitch.\n\n**Tasks**\n- [ ] Find the right contact (agriculture / LatAm risk).\n- [ ] Send the backtest summary: basis risk 0.34 vs 0.51 for rainfall on 2024/25.\n- [ ] Ask what proof they need to license a soybean trigger.\n\n**Done when**: one call held and their requirements written down."
+    },
+    {
+      "title": "Market size, bottom-up",
+      "labels": ["market", "pitch"], "milestone": "Weeks 9-12: decide (to 15 Jan 2027)",
+      "body": "Business Overview: quantify before any pitch.\n\n**Tasks**\n- [ ] Soybean area by state (Conab) and rural credit for soybean by region (Banco Central, SICOR open data).\n- [ ] Number of agricultural and credit co-ops in soy regions (OCB).\n- [ ] Bottom-up: hectares per customer × price per hectare × number of target customers, for RS + PR first, then Brazil.\n\n**Done when**: one slide with sources and the formula."
+    },
+    {
+      "title": "Founder role: Embrapa post and USP intellectual property",
+      "labels": ["company", "priority: high"], "milestone": "Weeks 1-4: start (to 15 Nov 2026)",
+      "body": "Constraint to clear before founding (Business Overview).\n\n**Tasks**\n- [ ] Ask the Embrapa technology-transfer / innovation office: can a researcher be a partner, an administrator, or need leave (Lei 10.973/2004, art. 15)? Who owns models built with Embrapa data or time?\n- [ ] Ask the Agência USP de Inovação about IP from USP thesis data and the code in this repo.\n- [ ] Write down the answers and agree the founder structure (business cofounder as managing partner).\n\n**Done when**: written answers from both offices and a founder structure that works with them."
+    },
+    {
+      "title": "Find a data / remote-sensing cofounder and a business cofounder",
+      "labels": ["company"], "milestone": "Weeks 9-12: decide (to 15 Jan 2027)",
+      "body": "**Roles**\n- Data and remote-sensing cofounder: satellite and weather pipelines, ML, API. Where to look: USP ICMC or Poli, INPE, ESALQ; the Ciampitti Lab (N Scout) team.\n- Business cofounder (managing partner): sales to co-ops, resellers and insurers; rural credit and insurance knowledge. Ex-co-op, ex-insurer or agfintech staff.\n- Advisors: crop modeler, agricultural insurance actuary, agricultural credit manager.\n\n**Tasks**\n- [ ] One-page \"what we're building and who we need\".\n- [ ] 5 conversations per role (hackathon, MaRS, USP networks, LinkedIn).\n- [ ] Trial project with the best candidate before any equity talk.\n\n**Done when**: at least one cofounder candidate is working on a trial project."
+    },
+    {
+      "title": "Lean Canvas",
+      "labels": ["company", "pitch"], "milestone": "Weeks 9-12: decide (to 15 Jan 2027)",
+      "body": "One-page Lean Canvas updated with interview results: problem, segment, unique value (early warning + lower basis risk), solution, channels (co-ops, agronomists), revenue (R$/ha), costs, key metrics, unfair advantage (physiology data, published backtest).\n\n**Done when**: canvas filled from evidence, not hypotheses, and reviewed after the interviews."
+    },
+    {
+      "title": "Draft the FAPESP PIPE Phase 1 proposal",
+      "labels": ["funding", "priority: high"], "milestone": "Weeks 9-12: decide (to 15 Jan 2027)",
+      "body": "Scientific question (draft): *Does a stage-weighted, physiology-based stress index derived from satellite and weather data predict municipal and field soybean yield loss better than NDVI anomalies and ZARC risk classes?*\n\n**Tasks**\n- [ ] Check open calls and limits: PIPE Phase 1 (regular and the 2026 thematic call, up to R$ 500 k), Centelha, Sebrae Catalisa ICT.\n- [ ] Use the validation results (backtest, CIs, holdout, early warning) as preliminary data.\n- [ ] Work plan: calibration with experiments, field validation with a co-op, live 2026/27 track record.\n- [ ] Budget: data cofounder, compute, field validation.\n- [ ] Company must exist (or plan for it) per PIPE rules; check the founder-role issue first.\n\n**Done when**: a full draft reviewed by one person who has won a PIPE before."
+    },
+    {
+      "title": "Apply to an incubator (ESALQTec or USP incubators)",
+      "labels": ["funding", "company"], "milestone": "MVP (first 6 months)",
+      "body": "**Tasks**\n- [ ] Compare ESALQTec (Piracicaba, agtech focus) and USP incubators (Cietec, Habits): requirements, cost, calls.\n- [ ] Apply to the best fit once the founder role is settled.\n\n**Done when**: application submitted."
+    },
+    {
+      "title": "Precision Digital Ag Hackathon (UIUC), apply by 6 Nov, event 13-15 Nov",
+      "labels": ["pitch", "product"], "milestone": "Weeks 1-4: start (to 15 Nov 2026)",
+      "body": "**Tasks**\n- [ ] Email digitalag@illinois.edu: fee? start time on 13 Nov? solo welcome?\n- [ ] Submit the application by 30 Oct (deadline 6 Nov).\n- [ ] Build at the event: clickable demo (stress map RS + PR, 2022 drought replayed week by week, Sentinel-2 field view).\n- [ ] Ask judges and mentors the interview questions; collect contacts; follow up within 48 h.\n\n**Done when**: demo built and contacts logged."
+    },
+    {
+      "title": "English pitch deck and one-pager with the validation numbers",
+      "labels": ["pitch"], "milestone": "Weeks 1-4: start (to 15 Nov 2026)",
+      "body": "**Message**: lead with early warning (by 15 Jan we see what a rainfall index only sees at season end, 8-12 weeks before harvest), then lower basis risk on new seasons (0.34 vs 0.51), then PR and portfolio-level gains. Be open that RS municipal skill is close to rainfall.\n\n**Tasks**\n- [ ] 3-minute pitch.\n- [ ] 6-8 slides with figs 6 and 7.\n- [ ] One-pager with QR to this repo.\n\n**Done when**: ready before the hackathon and MaRS Climate Impact (17-18 Nov)."
+    },
+    {
+      "title": "Mid-January go / change / stop decision",
+      "labels": ["company", "priority: high"], "milestone": "Weeks 9-12: decide (to 15 Jan 2027)",
+      "body": "Answer the three early questions:\n\n1. Does the model beat the baselines? (NDVI ✓, rainfall ✓ mostly, ZARC – see issue)\n2. Does it run without farm sensors? ✓\n3. Will someone pay per hectare? (interviews, LOIs)\n\n**Kill criteria** (Business Overview)\n- The index does not beat NDVI anomalies in the backtest → *not triggered*.\n- Fewer than 3 organisations agree to a paid pilot or LOI → open.\n\n**Decision**\n- Go: apply for PIPE with the chosen segment.\n- Change: problem real, buyer different → one more interview round.\n- Stop or rethink.\n\n**Done when**: decision written in this issue with the evidence."
+    }
+  ]
+}
