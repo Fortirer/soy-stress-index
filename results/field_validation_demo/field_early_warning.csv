@@ -1,0 +1,13 @@
+index,n_field_seasons,loss_rate,auc_loss,basis_risk,within_season_rank_r,asof
+Turgor field index,12,0.583,0.286,0.571,0.2,01-01
+Rainfall index at the field,12,0.583,0.5,0.429,,01-01
+Turgor field index,12,0.583,0.257,0.571,0.6,01-15
+Rainfall index at the field,12,0.583,0.786,0.286,,01-15
+Turgor field index,12,0.583,0.829,0.143,0.133,02-01
+Rainfall index at the field,12,0.583,0.957,0.143,,02-01
+Turgor field index,12,0.583,1.0,0.0,0.267,02-15
+Rainfall index at the field,12,0.583,0.957,0.143,,02-15
+Turgor field index,12,0.583,0.971,0.143,0.267,03-01
+Rainfall index at the field,12,0.583,0.957,0.143,,03-01
+Turgor field index,12,0.583,1.0,0.0,0.4,04-15
+Rainfall index at the field,12,0.583,0.957,0.143,,04-15

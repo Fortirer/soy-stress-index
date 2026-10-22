@@ -8,3 +8,5 @@ s2_cache/
 data/power_ext/
 data/field_cache/
 data/rs_experiments/
+results/field_validation/
+data/field_cache/

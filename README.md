@@ -228,6 +228,9 @@ Real field yields are not public, so this step needs a partner. Everything is re
 - `scripts/13_field_validation.py`: takes the partner's field polygons and yields per field and season, reads each field's Sentinel-2 curve and stages, adds weather at the field, and compares the field index with the municipal index on the same field-seasons (AUC, basis risk, within-season ranking of fields).
 - `python scripts/13_field_validation.py --demo` runs it end to end on 4 pilot plots with **synthetic** yields (a pipeline test, not a result).
 - `docs/pilot_data_request_pt.md`: the one-page data request for co-ops (in Portuguese).
+- `docs/piloto_kit_pt.md`: contact message, draft data-use agreement (to be reviewed with Agência USP de Inovação), timeline and how to run it.
+- The script takes the files as co-ops have them: Shapefile, KML/KMZ, GeoPackage or GeoJSON in any coordinate system, and CSV or Excel with Portuguese columns (`id_talhao`, `safra` as 2022 or "2021/22", `produtividade_kg_ha` or `produtividade_sc_ha`). `--check-only` lists problems before anything is downloaded.
+- The field index is the product index at field scale (each field's typical stage windows, data latency), compared with the municipal index and with a rainfall index at the field, at the end of the season and on 1 Jan, 15 Jan, 1 Feb, 15 Feb and 1 Mar. A two-page report in Portuguese for the co-op is written automatically (demo with synthetic yields: `results/field_validation_demo/relatorio_cooperativa.md`).
 
 ---
 

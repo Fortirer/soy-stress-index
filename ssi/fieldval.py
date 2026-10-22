@@ -33,7 +33,8 @@ def field_season_features(dates, ndvi_median: pd.Series, ind: pd.DataFrame, harv
     if st is None:
         return None
     wx = stage_weather(ind, {k: st[k] for k in ["veg_start", "veg_end", "rep_start", "rep_end"]})
-    return {"peak": st["peak"], "ndvi_vegetative": st["ndvi_vegetative"],
+    return {**{k: st[k] for k in ["veg_start", "veg_end", "rep_start", "rep_end"]},
+            "peak": st["peak"], "ndvi_vegetative": st["ndvi_vegetative"],
             "ndvi_reproductive": st["ndvi_reproductive"],
             "veg_water_deficit_mm": wx["veg_water_deficit_mm"], "win_water_deficit_mm": wx["rep_water_deficit_mm"],
             "veg_edd": wx["veg_edd"], "win_edd": wx["rep_edd"]}
@@ -61,8 +62,16 @@ def field_index(feat: pd.DataFrame) -> pd.Series:
 
 
 def _basis_risk(s, loss):
-    thr = np.quantile(s, 1 - loss.mean())
-    return 1 - ((s >= thr) & (loss == 1)).sum() / max(loss.sum(), 1)
+    """Pay exactly as many field-seasons as had a loss (ties broken at random,
+    so a flat index cannot look perfect by paying everyone)."""
+    k = int(loss.sum())
+    if k == 0:
+        return 0.0
+    rng = np.random.default_rng(0)
+    order = np.lexsort((rng.random(len(s)), -np.asarray(s, float)))
+    pay = np.zeros(len(s), bool)
+    pay[order[:k]] = True
+    return 1 - (pay & (loss == 1)).sum() / k
 
 
 def validate(df: pd.DataFrame, cols: dict[str, str]) -> pd.DataFrame:

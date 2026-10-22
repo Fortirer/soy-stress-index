@@ -182,3 +182,24 @@ def test_expected_loss_maps_are_monotone_and_capped():
     p = predict(t, pd.DataFrame({"st": "RS", "score": np.linspace(-5, 5, 50)}))
     assert np.all(np.diff(p["p_loss"].values) >= 0) and np.all(np.diff(p["expected_anomaly"].values) <= 0)
     assert p["p_loss"].max() <= 0.98 and p["p_loss"].min() >= 0.02
+
+
+def test_coop_input_shapefile_utm_and_portuguese_sheet(tmp_path):
+    import pytest
+    gpd = pytest.importorskip("geopandas")
+    import pandas as pd
+    from shapely.geometry import Polygon
+    from ssi.coop_input import check, harvest_year, read_fields, read_yields
+    assert harvest_year("2021/22") == 2022 and harvest_year("2021/2022") == 2022 and harvest_year(2023) == 2023
+    poly = Polygon([(-53.60, -28.60), (-53.59, -28.60), (-53.59, -28.59), (-53.60, -28.59)])
+    g = gpd.GeoDataFrame({"ID_Talhão": ["T1", "T2"]}, geometry=[poly, poly], crs="EPSG:4326").to_crs("EPSG:31982")
+    g.to_file(tmp_path / "talhoes.shp")
+    f = read_fields(tmp_path / "talhoes.shp")
+    r = f["features"][0]["geometry"]["coordinates"][0]
+    assert f["features"][0]["properties"]["field_id"] == "T1" and abs(r[0][0] + 53.60) < 1e-4
+    pd.DataFrame({"id_talhao": ["T1"] * 3, "Safra": ["2020/21", "2021/22", "2022/23"],
+                  "Produtividade (sc/ha)": [60, 30, 62]}).to_excel(tmp_path / "prod.xlsx", index=False)
+    y = read_yields(tmp_path / "prod.xlsx")
+    assert list(y["harvest_year"]) == [2021, 2022, 2023] and y["yield_kg_ha"].iloc[1] == 1800
+    msgs = check(f, y)
+    assert any("sem produtividade" in m for m in msgs)

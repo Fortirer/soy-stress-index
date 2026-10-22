@@ -1,3 +1,4 @@
 index,n_field_seasons,loss_rate,auc_loss,basis_risk,within_season_rank_r
-Turgor field index,12,0.583,0.886,0.143,-0.2
-Turgor municipal index,12,0.583,0.843,0.0,
+Turgor field index,12,0.583,1.0,0.0,0.4
+Rainfall index at the field,12,0.583,0.957,0.143,
+Turgor municipal index,12,0.583,0.843,0.143,
