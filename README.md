@@ -27,6 +27,14 @@ One definition is used everywhere: `ssi.early.turgor_index()`. It is the Stage-w
 - On the two new seasons it is slightly behind overall (0.67 vs 0.70): ahead in RS (0.82 vs 0.81), behind in PR (0.64 vs 0.66), and still well ahead of rainfall, NDVI and ZARC. The difference between the two versions is small and not consistent, so the choice rests on what can run in real time: the season's own windows need the NDVI peak, which comes in February-March.
 - The older versions stay in the tables below as research history (`SSI v1 full`).
 
+## Live monitor, season 2026/27
+
+Every week from 1 December to 15 April a GitHub Action runs `scripts/17_monitor.py` and commits a stress map and table for every municipality in RS and PR to [`monitor/`](monitor/README.md). Each week is kept, so the season is a public, timestamped record written before harvest.
+
+Replay of 15 February 2025 (2024/25 RS drought, 2025 left out of the reference): municipalities flagged **severe** ended the season 30% below trend and 83% had a loss above 10%; **normal** ones ended +1% (AUC 0.81, two months before harvest).
+
+![Replay 15 Feb 2025](monitor/replays/2024-25/2025-02-15/map.png)
+
 ---
 
 ## v1 results: satellite crop stages + NDVI cut basis risk
@@ -278,6 +286,8 @@ python scripts/09_extend_weather.py                     # POWER to May 2025
 python scripts/12_holdout_2024_2025.py                  # needs apisidra.ibge.gov.br
 python scripts/14_validation_figures.py
 python scripts/15_zarc_baseline.py --offline          # ZARC tables in data/zarc/ (MAPA open data)
+python scripts/16_monitor_reference.py                # once: past seasons on weekly anchors
+python scripts/17_monitor.py --asof 2025-02-16          # live monitor (default: today)
 python scripts/13_field_validation.py --fields F.geojson --yields Y.csv   # co-op pilot
 pytest -q                                                 # offline tests
 ```

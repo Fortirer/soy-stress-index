@@ -156,3 +156,16 @@ def test_turgor_index_is_ssi_on_asof_features():
     assert np.allclose(turgor_index(f), ssi(f))
     ref = f["year"] < 2009
     assert not np.allclose(turgor_index(f, ref=ref), turgor_index(f))
+
+
+def test_monitor_anchors_and_classes():
+    import numpy as np
+    import pandas as pd
+    from ssi.monitor import anchor_for, harvest_year_of, own_percentile, stress_class
+    assert anchor_for("2026-11-20") is None
+    assert anchor_for("2026-12-02") == "12-01" and anchor_for("2027-01-23") == "01-22"
+    assert anchor_for("2027-05-10") == "04-15" and harvest_year_of("2026-12-02") == 2027
+    assert [stress_class(p) for p in (99, 90, 75, 10)] == ["severe", "high", "watch", "normal"]
+    s = pd.Series(list(range(20)) + [25.0])
+    pct = own_percentile(s, pd.Series([1] * 21), np.array([False] * 20 + [True]))
+    assert pct.iloc[-1] == 100.0 and pct.iloc[:20].isna().all()

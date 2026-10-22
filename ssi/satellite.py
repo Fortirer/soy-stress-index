@@ -67,7 +67,8 @@ def cropland_mask(cat, bbox, year: int, geobox) -> np.ndarray:
 
 
 def modis_season_ndvi(features: list[dict], harvest_year: int,
-                      resolution_deg: float = 0.01) -> pd.DataFrame:
+                      resolution_deg: float = 0.01, end: str | None = None,
+                      mask_fallback_year: int | None = None) -> pd.DataFrame:
     """Mean cropland NDVI per municipality for every 16-day composite of one season.
 
     resolution_deg=0.01 (~1 km) keeps downloads small by reading COG overviews;
@@ -83,7 +84,8 @@ def modis_season_ndvi(features: list[dict], harvest_year: int,
     zones = municipality_raster(features, geobox)
 
     cat = catalog()
-    start, end = season_dates(harvest_year)
+    start, season_end = season_dates(harvest_year)
+    end = min(end, season_end) if end else season_end     # live monitor: stop at the as-of date
     items = list(cat.search(collections=[MODIS_NDVI], bbox=bbox,
                             datetime=f"{start}/{end}").items())
     if not items:
@@ -97,7 +99,12 @@ def modis_season_ndvi(features: list[dict], harvest_year: int,
     nd = ds[NDVI_BAND].values.astype("float32")
     qa = ds[QA_BAND].values
     nd = np.where((qa >= 0) & (qa <= 1) & (nd > -2000), nd * 1e-4, np.nan)
-    mask = crop & summer_crop_mask(nd, times, harvest_year)
+    if mask_fallback_year and not _season_complete(times, harvest_year):
+        # early in a live season the Jan-Mar canopy is not there yet: take the
+        # summer-crop pixels from a past season on the same grid
+        mask = crop & _summer_mask_of(features, mask_fallback_year, geobox, bbox, cat)
+    else:
+        mask = crop & summer_crop_mask(nd, times, harvest_year)
     rows = []
     for i, t in enumerate(times):
         z = zonal_mean(np.where(mask, nd[i], np.nan), zones)
@@ -106,6 +113,23 @@ def modis_season_ndvi(features: list[dict], harvest_year: int,
     out = pd.concat(rows, ignore_index=True)
     out["harvest_year"] = harvest_year
     return out
+
+
+def _season_complete(times: pd.DatetimeIndex, harvest_year: int) -> bool:
+    return bool(((times >= f"{harvest_year}-01-01") & (times <= f"{harvest_year}-03-31")).sum() >= 4)
+
+
+def _summer_mask_of(features, harvest_year, geobox, bbox, cat) -> np.ndarray:
+    import odc.stac
+    start, end = season_dates(harvest_year)
+    items = list(cat.search(collections=[MODIS_NDVI], bbox=bbox, datetime=f"{start}/{end}").items())
+    common = dict(geobox=geobox, groupby="solar_day")
+    n = odc.stac.load(items, bands=[NDVI_BAND], resampling="average", dtype="float32", **common)
+    q = odc.stac.load(items, bands=[QA_BAND], resampling="nearest", dtype="int16", **common)
+    nd = n[NDVI_BAND].values.astype("float32")
+    qa = q[QA_BAND].values
+    nd = np.where((qa >= 0) & (qa <= 1) & (nd > -2000), nd * 1e-4, np.nan)
+    return summer_crop_mask(nd, pd.to_datetime(n.time.values), harvest_year)
 
 
 def summer_crop_mask(nd: np.ndarray, times: pd.DatetimeIndex, harvest_year: int,
