@@ -25,7 +25,7 @@ from scipy.stats import theilslopes
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ssi.config import DATA, LOSS_THRESHOLD, RESULTS  # noqa: E402
 from ssi.data import load_boundaries  # noqa: E402
-from ssi.early import WINDOWS, asof_features, typical_windows  # noqa: E402
+from ssi.early import PRODUCT_INDEX, WINDOWS, asof_features, add_turgor_index, typical_windows  # noqa: E402
 from ssi.index import local_z, rainfall_index, ssi  # noqa: E402
 from ssi.satellite import stage_table  # noqa: E402
 from ssi.uncertainty import point_metrics  # noqa: E402
@@ -142,6 +142,7 @@ if __name__ == "__main__":
         "NDVI only": (-local_z(full, "ndvi_reproductive", ref=ref)).fillna(0).values,
         "Turgor weather only": ssi(d.drop(columns=["ndvi_vegetative", "ndvi_reproductive"]), ref=ref).values,
         "Turgor full (+ NDVI)": ssi(d, ref=ref).values,
+        PRODUCT_INDEX: add_turgor_index(full, ref=ref),
     }
     keep = full[["st", "fips5", "year", "area_harvested_ha", "yield_kg_ha", "rel_anom", "loss"]].copy()
     for k, v in scores.items():

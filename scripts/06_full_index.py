@@ -8,7 +8,9 @@ Needs data/ndvi_stages.csv.gz (script 04) and data/stage_weather.csv.gz
   - SSI v0                   calendar windows (Jan-Feb), weather only
   - NDVI only                reproductive-window NDVI anomaly
   - SSI v1, weather only     daily weather summed over satellite-detected stages
-  - SSI v1, full             + NDVI in each stage
+  - SSI v1, full             + NDVI in each stage (each season's own windows)
+  - Turgor index             the product: typical windows + data latency
+                             (ssi/early.py, needs data/asof_features.csv.gz, script 11)
 """
 import sys
 from pathlib import Path
@@ -19,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ssi.config import DATA, DROUGHT_HARVESTS, FOCUS_STATES, RESULTS  # noqa: E402
 from ssi.data import load_panel  # noqa: E402
 from ssi.evaluate import drought_year_table, metrics  # noqa: E402
+from ssi.early import PRODUCT_INDEX, add_turgor_index  # noqa: E402
 from ssi.index import local_z, rainfall_index, ssi  # noqa: E402
 
 panel = load_panel()
@@ -40,7 +43,9 @@ def score_all(df: pd.DataFrame) -> dict:
             "SSI v0 (calendar windows)": ssi(no_ndvi).values,
             "NDVI only": (-local_z(df, "ndvi_reproductive")).fillna(0).values,
             "SSI v1 weather (satellite stages)": ssi(v1_in.drop(columns=[c for c in v1_in if c.startswith("ndvi_")])).values,
-            "SSI v1 full (+ NDVI)": ssi(v1_in).values}
+            "SSI v1 full (+ NDVI)": ssi(v1_in).values,
+            # the product: real-time version (typical windows, data latency), end of season
+            PRODUCT_INDEX: add_turgor_index(df)}
 
 
 rows, keep = [], {}

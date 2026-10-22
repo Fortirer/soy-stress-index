@@ -14,7 +14,7 @@ from ssi.config import RESULTS  # noqa: E402
 from ssi.uncertainty import year_bootstrap  # noqa: E402
 
 INDICES = ["Rainfall index", "SSI v0 (calendar windows)", "NDVI only",
-           "SSI v1 weather (satellite stages)", "SSI v1 full (+ NDVI)"]
+           "SSI v1 weather (satellite stages)", "SSI v1 full (+ NDVI)", "Turgor index"]
 REF = "Rainfall index"
 
 sc = pd.read_csv(RESULTS / "v1_scores_rs_pr.csv.gz")
@@ -28,4 +28,4 @@ for region, states in {"RS + PR": ["RS", "PR"], "RS": ["RS"], "PR": ["PR"]}.item
 res = pd.concat(out).round(3)
 res.to_csv(RESULTS / "v1_ci.csv", index=False)
 pd.set_option("display.width", 220)
-print(res[res["index"].isin([REF, "SSI v1 full (+ NDVI)"])].to_string(index=False))
+print(res[res["index"].isin([REF, "SSI v1 full (+ NDVI)", "Turgor index"])].to_string(index=False))

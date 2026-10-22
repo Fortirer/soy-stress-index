@@ -82,7 +82,7 @@ rows = []
 bt = pd.read_csv(RESULTS / "v1_scores_rs_pr.csv.gz").merge(
     seasons[["fips5", "year", "zarc_risk"]], on=["fips5", "year"], how="left")
 bt = bt.dropna(subset=["zarc_risk"]).reset_index(drop=True)
-names = {"Turgor full (+ NDVI)": "SSI v1 full (+ NDVI)", "ZARC risk class": "zarc_risk",
+names = {"Turgor index": "Turgor index", "ZARC risk class": "zarc_risk",
          "Rainfall index": "Rainfall index", "NDVI only": "NDVI only"}
 for region, sts in {"RS + PR": ["RS", "PR"], "RS": ["RS"], "PR": ["PR"]}.items():
     d = bt[bt["st"].isin(sts)].reset_index(drop=True)
@@ -98,7 +98,7 @@ ho = pd.read_csv(RESULTS / "municipal_scores_2001_2025.csv.gz")
 ho = ho[ho["year"].isin([2024, 2025])].merge(seasons[["fips5", "year", "zarc_risk"]],
                                               on=["fips5", "year"], how="left")
 ho = ho.dropna(subset=["zarc_risk"]).reset_index(drop=True)
-hnames = {"Turgor full (+ NDVI)": "Turgor full (+ NDVI)", "ZARC risk class": "zarc_risk",
+hnames = {"Turgor index": "Turgor index", "ZARC risk class": "zarc_risk",
           "Rainfall index": "Rainfall index", "NDVI only": "NDVI only"}
 for region, sts in {"RS + PR": ["RS", "PR"], "RS": ["RS"], "PR": ["PR"]}.items():
     d = ho[ho["st"].isin(sts)].reset_index(drop=True)

@@ -136,8 +136,8 @@ d["field_index"] = field_index(d).values
 muni_fp = RESULTS / "municipal_scores_2001_2025.csv.gz"
 cols = {"Turgor field index": "field_index"}
 if "fips5" in d.columns and muni_fp.exists():
-    m = pd.read_csv(muni_fp)[["fips5", "year", "Turgor full (+ NDVI)"]]
-    m = m.rename(columns={"year": "harvest_year", "Turgor full (+ NDVI)": "municipal_index"})
+    m = pd.read_csv(muni_fp)[["fips5", "year", "Turgor index"]]
+    m = m.rename(columns={"year": "harvest_year", "Turgor index": "municipal_index"})
     d = d.merge(m, on=["fips5", "harvest_year"], how="left")
     cols["Turgor municipal index"] = "municipal_index"
 d.to_csv(out / "field_scores.csv", index=False)

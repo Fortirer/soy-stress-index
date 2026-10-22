@@ -141,3 +141,18 @@ def test_zarc_table_and_scores(tmp_path):
                       "green_up": ["2022-11-15", "2023-01-20"]})
     out = zarc_scores(s, lk).tolist()
     assert out == [20.0, 50.0]   # sown ~26 Oct -> best cycle 20%; sown ~31 Dec -> not indicated
+
+
+def test_turgor_index_is_ssi_on_asof_features():
+    import numpy as np
+    import pandas as pd
+    from ssi.early import turgor_index
+    from ssi.index import ssi
+    rng = np.random.default_rng(3)
+    f = pd.DataFrame({"fips5": np.repeat([1, 2], 10), "year": list(range(2001, 2011)) * 2,
+                      "veg_water_deficit_mm": rng.normal(50, 10, 20), "win_water_deficit_mm": rng.normal(100, 30, 20),
+                      "veg_edd": rng.normal(10, 3, 20), "win_edd": rng.normal(20, 5, 20),
+                      "ndvi_vegetative": rng.normal(0.7, 0.05, 20), "ndvi_reproductive": rng.normal(0.8, 0.05, 20)})
+    assert np.allclose(turgor_index(f), ssi(f))
+    ref = f["year"] < 2009
+    assert not np.allclose(turgor_index(f, ref=ref), turgor_index(f))

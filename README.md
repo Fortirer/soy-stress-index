@@ -8,6 +8,27 @@ The index scores each municipality and season for water deficit, extreme heat an
 
 ---
 
+## The Turgor index (product definition)
+
+One definition is used everywhere: `ssi.early.turgor_index()`. It is the Stage-weighted Stress Index computed **the way it can run in real time**:
+
+- stage windows = each municipality's **typical** windows (median green-up and NDVI peak of its other seasons), because the current season's NDVI peak is only known late in the season;
+- data latency: NASA POWER weather 3 days late, MODIS 16-day composites 23 days late;
+- `asof` date: any day of the season gives the in-season warning; `04-15` (all windows closed) gives the end-of-season value used in the backtests.
+
+| Test | Region | Turgor index | v1, season's own windows | Rainfall index | NDVI only | ZARC |
+| --- | --- | --- | --- | --- | --- | --- |
+| Backtest 2001-2023, AUC | RS + PR | **0.862** | 0.828 | 0.784 | 0.773 | 0.573 |
+| Backtest 2001-2023, basis risk | RS + PR | **0.33** | 0.37 | 0.44 | 0.44 | 0.64 |
+| Holdout 2024-2025, AUC | RS + PR | 0.674 | **0.695** | 0.563 | 0.606 | 0.571 |
+| Holdout 2024-2025, basis risk | RS + PR | 0.36 | **0.34** | 0.51 | 0.42 | 0.46 |
+
+- In the backtest the real-time index beats the season's-own-window version in every region (RS 0.90 vs 0.87, PR 0.82 vs 0.78).
+- On the two new seasons it is slightly behind overall (0.67 vs 0.70): ahead in RS (0.82 vs 0.81), behind in PR (0.64 vs 0.66), and still well ahead of rainfall, NDVI and ZARC. The difference between the two versions is small and not consistent, so the choice rests on what can run in real time: the season's own windows need the NDVI peak, which comes in February-March.
+- The older versions stay in the tables below as research history (`SSI v1 full`).
+
+---
+
 ## v1 results: satellite crop stages + NDVI cut basis risk
 
 17,342 municipality-harvests in RS and PR, 2001-2023. MODIS NDVI over summer-crop pixels in each municipality; crop stages read from each season's NDVI curve; NASA POWER daily weather summed over those stages. **No weights were fitted** (physiology priors only), so there is no training leakage.
@@ -19,13 +40,16 @@ The index scores each municipality and season for water deficit, extreme heat an
 | RS + PR | SSI v0 (calendar windows) | 0.791 | 0.71 | 0.46 |
 | RS + PR | NDVI only | 0.773 | 0.85 | 0.44 |
 | RS + PR | SSI v1, weather by satellite stage | 0.786 | 0.79 | 0.44 |
-| RS + PR | **SSI v1 full (+ NDVI)** | **0.828** | **0.88** | **0.37** |
+| RS + PR | SSI v1 full (+ NDVI), season's own windows | 0.828 | 0.88 | 0.37 |
+| RS + PR | **Turgor index (real-time, typical windows)** | **0.862** | **0.86** | **0.33** |
 | RS | ZARC risk class | 0.584 | 0.51 | 0.60 |
 | RS | Rainfall index | 0.857 | 0.76 | 0.31 |
-| RS | **SSI v1 full** | **0.871** | **0.92** | **0.30** |
+| RS | SSI v1 full | 0.871 | 0.92 | 0.30 |
+| RS | **Turgor index** | **0.896** | **0.91** | **0.26** |
 | PR | ZARC risk class | 0.535 | 0.49 | 0.73 |
 | PR | Rainfall index | 0.696 | 0.58 | 0.60 |
-| PR | **SSI v1 full** | **0.775** | **0.86** | **0.46** |
+| PR | SSI v1 full | 0.775 | 0.86 | 0.46 |
+| PR | **Turgor index** | **0.821** | **0.85** | **0.39** |
 
 - The full index **misses 15% fewer real losses** than a rainfall trigger over RS + PR (basis risk 0.44 to 0.37), and **23% fewer in Paraná** (0.60 to 0.46).
 - Neither satellite nor weather alone gets there: NDVI only and weather-by-stage only both stay at 0.44. The gain comes from combining them by stage.
@@ -50,17 +74,20 @@ These two harvests were never used to build the index. Yields come fresh from IB
 | RS + PR, 2024+2025 | ZARC risk class | 0.571 | 0.462 |
 | RS + PR, 2024+2025 | Rainfall index | 0.563 | 0.505 |
 | RS + PR, 2024+2025 | NDVI only | 0.606 | 0.422 |
-| RS + PR, 2024+2025 | **Turgor full** | **0.695** | **0.342** |
+| RS + PR, 2024+2025 | Turgor v1 (season's own windows) | 0.695 | 0.342 |
+| RS + PR, 2024+2025 | **Turgor index** | **0.674** | **0.364** |
 | RS, 2024+2025 | ZARC risk class | 0.541 | 0.381 |
 | RS, 2024+2025 | Rainfall index | 0.777 | 0.231 |
-| RS, 2024+2025 | **Turgor full** | **0.808** | **0.203** |
+| RS, 2024+2025 | Turgor v1 | 0.808 | 0.203 |
+| RS, 2024+2025 | **Turgor index** | **0.816** | **0.201** |
 | PR, 2024+2025 | ZARC risk class | 0.607 | 0.563 |
 | PR, 2024+2025 | Rainfall index | 0.575 | 0.509 |
-| PR, 2024+2025 | **Turgor full** | **0.656** | **0.495** |
+| PR, 2024+2025 | Turgor v1 | 0.656 | 0.495 |
+| PR, 2024+2025 | **Turgor index** | **0.638** | **0.487** |
 
-- On new seasons the index **misses 32% fewer real losses** than the rainfall trigger (basis risk 0.51 to 0.34).
-- The 2025 RS drought (yield 34% below trend) ranks in the top 12% of stress since 2001.
-- Skill is lower than in the backtest (AUC 0.70 vs 0.83). Two seasons is a small sample, and part of the 2024 RS loss came from the May 2024 floods at harvest, which no drought index should flag.
+- On new seasons the Turgor index **misses 28% fewer real losses** than the rainfall trigger (basis risk 0.51 to 0.36).
+- The 2025 RS drought (yield 34% below trend) ranks in the top 16% of stress since 2001 (Turgor index; 12% for v1).
+- Skill is lower than in the backtest (AUC 0.67 vs 0.86). Two seasons is a small sample, and part of the 2024 RS loss came from the May 2024 floods at harvest, which no drought index should flag.
 
 ![Holdout](figures/fig7_holdout_2024_2025.png)
 
@@ -68,16 +95,19 @@ These two harvests were never used to build the index. Yields come fresh from IB
 
 95% intervals from 1,000 bootstrap resamples of whole harvest years. Municipalities in the same season share weather, so rows are not independent. `results/v1_ci.csv`.
 
-| Region | Metric | Rainfall index | Turgor full | Difference (95% CI) | Turgor better in |
+| Region | Metric | Rainfall index | Turgor index | Difference (95% CI) | Turgor better in |
 | --- | --- | --- | --- | --- | --- |
-| RS + PR | AUC | 0.784 (0.70-0.84) | 0.828 (0.77-0.87) | +0.044 (-0.003 to +0.107) | 96% of resamples |
-| RS + PR | Basis risk | 0.44 (0.33-0.61) | 0.37 (0.29-0.51) | -0.067 (-0.16 to +0.01) | 95% |
-| RS + PR | State-year r | 0.68 (0.52-0.78) | 0.88 (0.76-0.93) | +0.19 (+0.09 to +0.32) | >99% |
-| PR | Basis risk | 0.60 (0.47-0.81) | 0.46 (0.38-0.60) | -0.14 (-0.26 to -0.05) | >99% |
-| RS | Basis risk | 0.31 (0.20-0.48) | 0.30 (0.21-0.46) | -0.01 (-0.12 to +0.12) | 55% |
+| RS + PR | AUC | 0.784 (0.70-0.84) | 0.862 (0.81-0.90) | +0.078 (+0.029 to +0.134) | >99% of resamples |
+| RS + PR | Basis risk | 0.44 (0.33-0.61) | 0.33 (0.25-0.46) | -0.108 (-0.20 to -0.02) | >99% |
+| RS + PR | State-year r | 0.68 (0.52-0.78) | 0.86 (0.78-0.92) | +0.18 (+0.09 to +0.34) | >99% |
+| PR | AUC | 0.696 (0.57-0.78) | 0.821 (0.75-0.87) | +0.125 (+0.047 to +0.214) | >99% |
+| PR | Basis risk | 0.60 (0.47-0.81) | 0.39 (0.32-0.55) | -0.21 (-0.34 to -0.10) | >99% |
+| RS | AUC | 0.857 (0.78-0.91) | 0.896 (0.83-0.94) | +0.039 (-0.015 to +0.094) | 92% |
+| RS | Basis risk | 0.31 (0.20-0.48) | 0.26 (0.17-0.40) | -0.05 (-0.15 to +0.06) | 81% |
 
-- **Paraná: the gain is clear** on every metric. **RS + PR: borderline** at the municipality level, clear at the portfolio (state-year) level.
-- **Rio Grande do Sul: no clear gain** over rainfall at the municipality level. RS droughts are rainfall droughts, so a rainfall index already works there; the gain in RS is in portfolio correlation and in lead time (below).
+- **RS + PR and Paraná: the gain over rainfall is clear** on every metric.
+- **Rio Grande do Sul: likely but not proven** at the municipality level (92% of resamples). RS droughts are rainfall droughts, so a rainfall index already works well there; the clear gains in RS are portfolio correlation and lead time (below).
+- With the earlier v1 definition (season's own windows) the RS + PR gain was borderline (AUC +0.044, -0.003 to +0.107); the real-time definition makes it clear.
 
 ### 3. How early it warns
 
@@ -95,7 +125,7 @@ The index rebuilt as it would have looked on each date, using only data availabl
 - **By 15 January the index already matches the rainfall index's end-of-season skill** (0.78), about 6 weeks earlier. In PR it beats the final rainfall index from 1 January.
 - Typical harvest is late Feb-March in PR and March-April in RS, so a usable warning comes **8-12 weeks before harvest**.
 - On the 2024-2025 holdout the same holds: by 1 January AUC 0.68 (rainfall: no signal), by 15 February 0.71 vs 0.68.
-- The real-time version with typical windows ends the season at AUC 0.86, higher than the full-season version with each season's own satellite windows (0.83). In a drought the NDVI peak comes early and low, which shifts the season's own window; a fixed window keeps the collapse inside it. The product should use typical windows.
+- The real-time version with typical windows ends the season at AUC 0.86, higher than the full-season version with each season's own satellite windows (0.83). In a drought the NDVI peak comes early and low, which shifts the season's own window; a fixed window keeps the collapse inside it. This is why the product (the Turgor index) uses typical windows.
 
 ![Early warning](figures/fig6_early_warning.png)
 
@@ -105,18 +135,18 @@ ZARC (Zoneamento Agrícola de Risco Climático, MAPA/Embrapa) is the official zo
 
 ZARC score per municipality-season: sowing date = NDVI green-up minus 20 days; soil class AD2 (soil type 2 in tables before 2023/24); the lowest-risk cycle available; the ZARC table of that safra (MAPA open data, safras 2017/18 to 2025/26; harvests before 2018 use the 2017/18 table). `scripts/15_zarc_baseline.py`, `results/baselines_ci.csv`, `results/zarc_scores.csv.gz`.
 
-| Test | Region | Turgor full | ZARC | Rainfall | NDVI only | Turgor minus ZARC, AUC (95% CI) |
+| Test | Region | Turgor index | ZARC | Rainfall | NDVI only | Turgor minus ZARC, AUC (95% CI) |
 | --- | --- | --- | --- | --- | --- | --- |
-| Backtest 2001-2023, AUC | RS + PR | **0.828** | 0.573 | 0.784 | 0.773 | +0.26 (+0.20 to +0.31) |
-| Backtest 2001-2023, AUC | RS | **0.871** | 0.584 | 0.857 | 0.829 | +0.29 (+0.22 to +0.35) |
-| Backtest 2001-2023, AUC | PR | **0.775** | 0.535 | 0.696 | 0.705 | +0.24 (+0.18 to +0.30) |
-| Backtest, basis risk | RS + PR | **0.37** | 0.64 | 0.44 | 0.44 | |
-| Holdout 2024-2025, AUC | RS + PR | **0.698** | 0.571 | 0.566 | 0.608 | +0.13 (+0.09 to +0.16)* |
-| Holdout, basis risk | RS + PR | **0.34** | 0.46 | 0.50 | 0.42 | |
+| Backtest 2001-2023, AUC | RS + PR | **0.862** | 0.573 | 0.784 | 0.773 | +0.29 (+0.24 to +0.33) |
+| Backtest 2001-2023, AUC | RS | **0.896** | 0.584 | 0.857 | 0.829 | +0.31 (+0.25 to +0.36) |
+| Backtest 2001-2023, AUC | PR | **0.821** | 0.535 | 0.696 | 0.705 | +0.29 (+0.22 to +0.33) |
+| Backtest, basis risk | RS + PR | **0.33** | 0.64 | 0.44 | 0.44 | |
+| Holdout 2024-2025, AUC | RS + PR | **0.677** | 0.571 | 0.566 | 0.608 | +0.11 (+0.07 to +0.15)* |
+| Holdout, basis risk | RS + PR | **0.36** | 0.46 | 0.50 | 0.42 | |
 
-\* Holdout intervals resample municipalities (only two seasons), so they are narrower than the year-resampled backtest intervals. Turgor beats ZARC in every region of the backtest (100% of resamples) and in the RS and RS + PR holdout. In the PR holdout the gain is borderline: AUC +0.05 (-0.01 to +0.12), basis risk 0.49 vs 0.56.
+\* Holdout intervals resample municipalities (only two seasons), so they are narrower than the year-resampled backtest intervals. Turgor beats ZARC in every region of the backtest (100% of resamples) and in the RS and RS + PR holdout. In the PR holdout the gain is borderline: AUC +0.03 (-0.03 to +0.10), basis risk 0.48 vs 0.56.
 
-- **ZARC barely separates loss seasons from normal ones** (AUC 0.54-0.61). It is a pre-season, static zoning: it says where and when sowing is risky, not how this season is going. On 2018-2023 alone, where each safra has its own table, ZARC reaches 0.62 against 0.85 for Turgor.
+- **ZARC barely separates loss seasons from normal ones** (AUC 0.54-0.61). It is a pre-season, static zoning: it says where and when sowing is risky, not how this season is going. On 2018-2023 alone, where each safra has its own table, ZARC reaches 0.62 against 0.85 for Turgor v1.
 - ZARC still carries some portfolio signal (state-year r 0.41), possibly because dry springs delay sowing into riskier windows (not tested).
 - Read this as "Turgor adds in-season information on top of the zoning lenders already use", not "ZARC is wrong": ZARC answers a different, pre-season question and remains an input.
 

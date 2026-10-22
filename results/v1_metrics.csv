@@ -4,13 +4,16 @@ RS + PR,SSI v0 (calendar windows),17342,0.791,0.513,0.457,0.707
 RS + PR,NDVI only,17342,0.773,0.489,0.442,0.855
 RS + PR,SSI v1 weather (satellite stages),17342,0.786,0.508,0.437,0.789
 RS + PR,SSI v1 full (+ NDVI),17342,0.828,0.604,0.373,0.875
+RS + PR,Turgor index,17342,0.862,0.661,0.332,0.863
 RS,Rainfall index,8996,0.857,0.613,0.312,0.761
 RS,SSI v0 (calendar windows),8996,0.845,0.595,0.386,0.79
 RS,NDVI only,8996,0.829,0.598,0.357,0.893
 RS,SSI v1 weather (satellite stages),8996,0.818,0.566,0.382,0.859
 RS,SSI v1 full (+ NDVI),8996,0.871,0.682,0.304,0.922
+RS,Turgor index,8996,0.896,0.723,0.262,0.913
 PR,Rainfall index,8346,0.696,0.358,0.604,0.582
 PR,SSI v0 (calendar windows),8346,0.727,0.397,0.575,0.63
 PR,NDVI only,8346,0.705,0.346,0.549,0.779
 PR,SSI v1 weather (satellite stages),8346,0.747,0.425,0.524,0.774
 PR,SSI v1 full (+ NDVI),8346,0.775,0.489,0.463,0.864
+PR,Turgor index,8346,0.821,0.563,0.394,0.853

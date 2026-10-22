@@ -14,6 +14,9 @@ RS + PR,SSI v1 weather (satellite stages),state_year_r,0.789,0.614,0.878,0.108,-
 RS + PR,SSI v1 full (+ NDVI),auc_loss,0.828,0.768,0.87,0.044,-0.003,0.107,0.964
 RS + PR,SSI v1 full (+ NDVI),basis_risk,0.373,0.288,0.505,-0.067,-0.163,0.013,0.946
 RS + PR,SSI v1 full (+ NDVI),state_year_r,0.875,0.764,0.93,0.194,0.091,0.324,0.999
+RS + PR,Turgor index,auc_loss,0.862,0.806,0.896,0.078,0.029,0.134,0.998
+RS + PR,Turgor index,basis_risk,0.332,0.25,0.46,-0.108,-0.199,-0.024,0.993
+RS + PR,Turgor index,state_year_r,0.863,0.78,0.92,0.182,0.09,0.337,1.0
 RS,Rainfall index,auc_loss,0.857,0.783,0.908,,,,
 RS,Rainfall index,basis_risk,0.312,0.195,0.48,,,,
 RS,Rainfall index,state_year_r,0.761,0.595,0.888,,,,
@@ -29,6 +32,9 @@ RS,SSI v1 weather (satellite stages),state_year_r,0.859,0.665,0.95,0.098,-0.095,
 RS,SSI v1 full (+ NDVI),auc_loss,0.871,0.798,0.919,0.014,-0.044,0.072,0.684
 RS,SSI v1 full (+ NDVI),basis_risk,0.304,0.206,0.457,-0.008,-0.115,0.117,0.553
 RS,SSI v1 full (+ NDVI),state_year_r,0.922,0.809,0.979,0.161,0.007,0.321,0.981
+RS,Turgor index,auc_loss,0.896,0.834,0.937,0.039,-0.015,0.094,0.918
+RS,Turgor index,basis_risk,0.262,0.173,0.401,-0.05,-0.147,0.062,0.808
+RS,Turgor index,state_year_r,0.913,0.814,0.969,0.152,0.006,0.314,0.975
 PR,Rainfall index,auc_loss,0.696,0.573,0.782,,,,
 PR,Rainfall index,basis_risk,0.604,0.471,0.811,,,,
 PR,Rainfall index,state_year_r,0.582,0.264,0.79,,,,
@@ -44,3 +50,6 @@ PR,SSI v1 weather (satellite stages),state_year_r,0.774,0.468,0.912,0.192,-0.005
 PR,SSI v1 full (+ NDVI),auc_loss,0.775,0.706,0.823,0.079,0.01,0.164,0.986
 PR,SSI v1 full (+ NDVI),basis_risk,0.463,0.379,0.604,-0.141,-0.263,-0.049,0.996
 PR,SSI v1 full (+ NDVI),state_year_r,0.864,0.68,0.945,0.282,0.085,0.521,0.999
+PR,Turgor index,auc_loss,0.821,0.746,0.866,0.125,0.047,0.214,0.998
+PR,Turgor index,basis_risk,0.394,0.315,0.549,-0.21,-0.336,-0.095,0.999
+PR,Turgor index,state_year_r,0.853,0.657,0.935,0.271,0.04,0.545,0.991

@@ -41,7 +41,7 @@ fig.savefig(FIGURES / "fig6_early_warning.png", dpi=200)
 
 # ---- fig 7: holdout 2024-2025
 h = pd.read_csv(RESULTS / "holdout_metrics.csv")
-order = ["Rainfall index", "NDVI only", "Turgor weather only", "Turgor full (+ NDVI)"]
+order = ["Rainfall index", "NDVI only", "Turgor full (+ NDVI)", "Turgor index"]
 cols = [RAIN, GREY, "#6FA884", TURGOR]
 fig, axes = plt.subplots(1, 2, figsize=(11, 3.8))
 groups = [("RS + PR", "2024+2025"), ("RS + PR", "2024"), ("RS + PR", "2025"), ("RS", "2024+2025"), ("PR", "2024+2025")]
@@ -49,7 +49,8 @@ for ax, metric, title in [(axes[0], "auc_loss", "AUC (higher is better)"),
                           (axes[1], "basis_risk", "Losses missed, basis risk (lower is better)")]:
     for j, (idx, c) in enumerate(zip(order, cols)):
         vals = [h[(h.region == g) & (h.harvests == y) & (h["index"] == idx)][metric].iloc[0] for g, y in groups]
-        ax.bar([i + (j - 1.5) * 0.2 for i in range(len(groups))], vals, 0.2, color=c, label=idx)
+        ax.bar([i + (j - 1.5) * 0.2 for i in range(len(groups))], vals, 0.2, color=c,
+               label={"Turgor full (+ NDVI)": "Turgor v1 (season's own windows)"}.get(idx, idx))
     ax.set_xticks(range(len(groups)))
     ax.set_xticklabels([f"{g}\n{y}" for g, y in groups])
     ax.set_title(title)

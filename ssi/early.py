@@ -99,3 +99,34 @@ def asof_scores(feat: pd.DataFrame) -> pd.Series:
     f = feat.copy()
     # before a window starts every season is 0 -> z undefined -> component 0
     return ssi(f)
+
+
+# ---------------------------------------------------------------- the product index
+PRODUCT_INDEX = "Turgor index"
+END_OF_SEASON = "04-15"   # every typical window has closed by mid-April in RS and PR
+
+
+def load_asof_features(asof: str = END_OF_SEASON) -> pd.DataFrame:
+    """As-of features (scripts 11 and 12) for one date, all available harvests."""
+    from .config import DATA
+    files = [DATA / "asof_features.csv.gz", DATA / "asof_features_2024_2025.csv.gz"]
+    f = pd.concat([pd.read_csv(p) for p in files if p.exists()], ignore_index=True)
+    f = f[f["asof"] == asof].drop(columns="asof")
+    return f.drop_duplicates(["fips5", "year"], keep="last").reset_index(drop=True)
+
+
+def turgor_index(feat: pd.DataFrame, ref=None) -> pd.Series:
+    """THE Turgor index: the real-time Stage-weighted Stress Index.
+
+    feat: one row per municipality-season with as-of features (typical stage
+    windows, data latency; see asof_features). With asof = END_OF_SEASON it is
+    the end-of-season value; with an earlier date it is the in-season warning.
+    ref: rows that define each municipality's normal (training seasons only
+    when scoring new seasons). Higher = more stress."""
+    return ssi(feat, ref=ref)
+
+
+def add_turgor_index(df: pd.DataFrame, asof: str = END_OF_SEASON, ref=None) -> np.ndarray:
+    """Turgor index aligned to the rows of df (needs fips5, year)."""
+    f = df[["fips5", "year"]].merge(load_asof_features(asof), on=["fips5", "year"], how="left")
+    return turgor_index(f, ref=ref).values
