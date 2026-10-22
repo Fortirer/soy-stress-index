@@ -1,0 +1,8 @@
+nivel,formula,hectares,receita_rs_ano
+TAM,Toda a soja do Brasil × R$ 3/ha,48720000.0,146160000.0
+SAM,Soja do RS + PR × R$ 3/ha,12470000.0,37410000.0
+SOM: Cooperativas agrícolas,"15 clientes × 50,000 ha × R$ 3/ha",750000.0,2250000.0
+SOM: Revendas e tradings (barter/CPR),"10 clientes × 30,000 ha × R$ 3/ha",300000.0,900000.0
+SOM: Bancos e cooperativas de crédito,"5 clientes × 100,000 ha × R$ 3/ha",500000.0,1500000.0
+SOM: Seguradoras (licença),5% da área RS+PR segurada × R$ 202/ha de prêmio × 2%,623500.0,2518940.0
+SOM total (5 anos),soma dos segmentos,2173500.0,7168940.0
