@@ -1,0 +1,21 @@
+test,index,metric,estimate,ci_low,ci_high,diff_vs_ref,diff_ci_low,diff_ci_high,p_better
+backtest 2001-2023 (RS),Rainfall index,auc_loss,0.857,0.783,0.908,,,,
+backtest 2001-2023 (RS),Rainfall index,basis_risk,0.312,0.195,0.48,,,,
+backtest 2001-2023 (RS),Rainfall index,state_year_r,0.761,0.595,0.888,,,,
+backtest 2001-2023 (RS),base,auc_loss,0.896,0.836,0.937,0.039,-0.015,0.095,0.92
+backtest 2001-2023 (RS),base,basis_risk,0.261,0.174,0.401,-0.051,-0.147,0.06,0.803
+backtest 2001-2023 (RS),base,state_year_r,0.913,0.814,0.969,0.152,0.006,0.314,0.975
+backtest 2001-2023 (RS),vpd,auc_loss,0.888,0.818,0.932,0.031,-0.029,0.088,0.84
+backtest 2001-2023 (RS),vpd,basis_risk,0.277,0.181,0.434,-0.034,-0.141,0.09,0.707
+backtest 2001-2023 (RS),vpd,state_year_r,0.903,0.791,0.964,0.142,-0.004,0.296,0.97
+backtest 2001-2023 (RS),modis250,auc_loss,0.898,0.839,0.936,0.041,-0.012,0.096,0.932
+backtest 2001-2023 (RS),modis250,basis_risk,0.26,0.172,0.401,-0.052,-0.15,0.061,0.815
+backtest 2001-2023 (RS),modis250,state_year_r,0.912,0.811,0.969,0.151,0.004,0.313,0.975
+holdout 2024-2025 (RS),Rainfall index,auc_loss,0.777,,,,,,
+holdout 2024-2025 (RS),Rainfall index,basis_risk,0.231,,,,,,
+holdout 2024-2025 (RS),base,auc_loss,0.816,,,,,,
+holdout 2024-2025 (RS),base,basis_risk,0.199,,,,,,
+holdout 2024-2025 (RS),vpd,auc_loss,0.817,,,,,,
+holdout 2024-2025 (RS),vpd,basis_risk,0.199,,,,,,
+holdout 2024-2025 (RS),modis250,auc_loss,0.815,,,,,,
+holdout 2024-2025 (RS),modis250,basis_risk,0.201,,,,,,

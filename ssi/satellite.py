@@ -68,7 +68,7 @@ def cropland_mask(cat, bbox, year: int, geobox) -> np.ndarray:
 
 def modis_season_ndvi(features: list[dict], harvest_year: int,
                       resolution_deg: float = 0.01, end: str | None = None,
-                      mask_fallback_year: int | None = None) -> pd.DataFrame:
+                      mask_fallback_year: int | None = None, extra_mask=None) -> pd.DataFrame:
     """Mean cropland NDVI per municipality for every 16-day composite of one season.
 
     resolution_deg=0.01 (~1 km) keeps downloads small by reading COG overviews;
@@ -105,6 +105,8 @@ def modis_season_ndvi(features: list[dict], harvest_year: int,
         mask = crop & _summer_mask_of(features, mask_fallback_year, geobox, bbox, cat)
     else:
         mask = crop & summer_crop_mask(nd, times, harvest_year)
+    if extra_mask is not None:          # e.g. MapBiomas soybean pixels (ssi.mapbiomas)
+        mask = mask & extra_mask(geobox)
     rows = []
     for i, t in enumerate(times):
         z = zonal_mean(np.where(mask, nd[i], np.nan), zones)

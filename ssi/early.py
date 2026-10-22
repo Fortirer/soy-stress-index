@@ -53,7 +53,7 @@ def asof_features(ind: pd.DataFrame, ndvi: pd.DataFrame, code: int, years, dates
                   typ: pd.DataFrame, fallback: pd.Series) -> list[dict]:
     """ind: daily indicators (deficit, edd, prcp) for one municipality.
     ndvi: MODIS composites (date, ndvi, harvest_year) for one municipality."""
-    cum = ind[["deficit", "edd", "prcp"]].fillna(0).cumsum()
+    cum = ind[["deficit", "edd", "prcp", "vpd"]].fillna(0).cumsum()
     first = cum.index[0]
 
     def csum(col, a, b):
@@ -79,6 +79,7 @@ def asof_features(ind: pd.DataFrame, ndvi: pd.DataFrame, code: int, years, dates
                 end = min(win[b], wx_end)
                 row[f"{stage}_water_deficit_mm"] = csum("deficit", win[a], end)
                 row[f"{stage}_edd"] = csum("edd", win[a], end)
+                row[f"{stage}_vpd_sum"] = csum("vpd", win[a], end)
                 ndvi_col = "ndvi_vegetative" if stage == "veg" else "ndvi_reproductive"
                 if nd is not None:
                     centre = nd["date"] + pd.Timedelta(days=8)

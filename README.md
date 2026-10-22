@@ -35,6 +35,26 @@ Replay of 15 February 2025 (2024/25 RS drought, 2025 left out of the reference):
 
 ![Replay 15 Feb 2025](monitor/replays/2024-25/2025-02-15/map.png)
 
+## Rio Grande do Sul: trying to beat the rainfall index (issue #7)
+
+In RS the Turgor index beats the rainfall index on average, but the municipality-level gain is not proven (95% CI includes zero). Each idea was tested alone with `scripts/19_rs_experiments.py`, scored exactly like the product index, with 1,000 resampled harvest years (`results/rs_experiments.csv`).
+
+| RS, municipality level | AUC 2001-2023 | AUC gain vs rainfall (95% CI) | Basis risk | Basis-risk change vs rainfall (95% CI) | Holdout 2024-25 AUC / basis risk |
+| --- | --- | --- | --- | --- | --- |
+| Rainfall index | 0.857 | | 0.31 | | 0.777 / 0.23 |
+| Turgor index (current) | 0.896 | +0.039 (-0.015 to +0.095) | 0.26 | -0.051 (-0.147 to +0.060) | 0.816 / 0.20 |
+| + VPD by stage | 0.888 | +0.031 (-0.029 to +0.088) | 0.28 | -0.034 (-0.141 to +0.090) | 0.817 / 0.20 |
+| MODIS at full 250 m | 0.898 | +0.041 (-0.012 to +0.096) | 0.26 | -0.052 (-0.150 to +0.061) | 0.815 / 0.20 |
+| MapBiomas soybean-only mask | not run: needs `storage.googleapis.com` | | | | |
+| CHIRPS rain instead of NASA POWER | not run: needs `data.chc.ucsb.edu` | | | | |
+
+What this says:
+
+- **Neither VPD nor 250 m changes anything.** VPD adds no information beyond heat and water deficit; reading MODIS at 250 m instead of ~1 km gives the same municipal curves. Resolution of the canopy signal is not the limit in RS.
+- **The limit is statistical as much as scientific.** With 23 seasons the 95% interval on the basis-risk difference is about ±0.10 wide, so a real improvement smaller than about 0.10 cannot be proven at municipality level, whatever the model. In RS the rainfall index already reaches basis risk 0.31, because RS losses are mostly rainfall droughts.
+- **Still open:** a soybean-only mask (MapBiomas) and better rain (CHIRPS) are the two changes most likely to help, and need the two data hosts above. They can be run with `scripts/20_modis_rs_highres.py --soymask` and the `chirps` variant once the data are reachable.
+- **How to sell RS today:** on what is proven there: early warning (by 15 January the index reaches the rainfall index's end-of-season skill, about six weeks earlier), portfolio-level correlation (state-year r 0.91 vs 0.76, CI above zero) and the 2024-2025 holdout (basis risk 0.20 vs 0.23).
+
 ## Expected loss: from index to % and R$/ha
 
 Buyers price risk in % of yield and in reais, not in z-scores. `scripts/18_expected_loss.py` maps the Turgor index, per state, to:
