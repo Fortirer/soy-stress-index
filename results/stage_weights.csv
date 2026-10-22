@@ -1,0 +1,76 @@
+test,region,index,metric,estimate,ci_low,ci_high,diff_vs_ref,diff_ci_low,diff_ci_high,p_better
+backtest 2001-2023,RS + PR,prior (0.25/0.75),auc_loss,0.862,0.807,0.896,,,,
+backtest 2001-2023,RS + PR,prior (0.25/0.75),basis_risk,0.333,0.251,0.46,,,,
+backtest 2001-2023,RS + PR,prior (0.25/0.75),state_year_r,0.863,0.78,0.919,,,,
+backtest 2001-2023,RS + PR,fao_ky (0.18/0.82),auc_loss,0.861,0.807,0.896,-0.0,-0.004,0.003,0.4
+backtest 2001-2023,RS + PR,fao_ky (0.18/0.82),basis_risk,0.332,0.252,0.46,-0.001,-0.004,0.007,0.403
+backtest 2001-2023,RS + PR,fao_ky (0.18/0.82),state_year_r,0.865,0.777,0.917,0.002,-0.008,0.007,0.566
+backtest 2001-2023,RS + PR,equal (0.5/0.5),auc_loss,0.854,0.792,0.893,-0.008,-0.02,0.003,0.088
+backtest 2001-2023,RS + PR,equal (0.5/0.5),basis_risk,0.339,0.256,0.477,0.006,-0.011,0.03,0.272
+backtest 2001-2023,RS + PR,equal (0.5/0.5),state_year_r,0.845,0.76,0.919,-0.018,-0.038,0.017,0.194
+backtest 2001-2023,RS + PR,rep_only (0/1),auc_loss,0.855,0.801,0.893,-0.006,-0.019,0.004,0.134
+backtest 2001-2023,RS + PR,rep_only (0/1),basis_risk,0.345,0.258,0.47,0.012,-0.008,0.032,0.165
+backtest 2001-2023,RS + PR,rep_only (0/1),state_year_r,0.865,0.768,0.916,0.001,-0.036,0.02,0.423
+backtest 2001-2023,RS + PR,fitted (leave-one-season-out),auc_loss,0.857,0.8,0.893,-0.005,-0.01,-0.002,0.0
+backtest 2001-2023,RS + PR,fitted (leave-one-season-out),basis_risk,0.336,0.254,0.463,0.003,0.001,0.01,0.01
+backtest 2001-2023,RS + PR,fitted (leave-one-season-out),state_year_r,0.858,0.767,0.916,-0.005,-0.017,-0.0,0.022
+holdout 2024-2025,RS + PR,prior (0.25/0.75),auc_loss,0.674,,,,,,
+holdout 2024-2025,RS + PR,prior (0.25/0.75),basis_risk,0.368,,,,,,
+holdout 2024-2025,RS + PR,fao_ky (0.18/0.82),auc_loss,0.665,,,,,,
+holdout 2024-2025,RS + PR,fao_ky (0.18/0.82),basis_risk,0.379,,,,,,
+holdout 2024-2025,RS + PR,equal (0.5/0.5),auc_loss,0.7,,,,,,
+holdout 2024-2025,RS + PR,equal (0.5/0.5),basis_risk,0.337,,,,,,
+holdout 2024-2025,RS + PR,rep_only (0/1),auc_loss,0.643,,,,,,
+holdout 2024-2025,RS + PR,rep_only (0/1),basis_risk,0.419,,,,,,
+holdout 2024-2025,RS + PR,fitted (leave-one-season-out),auc_loss,0.675,,,,,,
+holdout 2024-2025,RS + PR,fitted (leave-one-season-out),basis_risk,0.368,,,,,,
+backtest 2001-2023,RS,prior (0.25/0.75),auc_loss,0.896,0.836,0.937,,,,
+backtest 2001-2023,RS,prior (0.25/0.75),basis_risk,0.261,0.174,0.401,,,,
+backtest 2001-2023,RS,prior (0.25/0.75),state_year_r,0.913,0.814,0.969,,,,
+backtest 2001-2023,RS,fao_ky (0.18/0.82),auc_loss,0.896,0.835,0.936,0.0,-0.004,0.004,0.535
+backtest 2001-2023,RS,fao_ky (0.18/0.82),basis_risk,0.262,0.173,0.401,0.001,-0.007,0.008,0.566
+backtest 2001-2023,RS,fao_ky (0.18/0.82),state_year_r,0.917,0.821,0.971,0.004,-0.005,0.009,0.794
+backtest 2001-2023,RS,equal (0.5/0.5),auc_loss,0.888,0.815,0.932,-0.008,-0.025,0.004,0.103
+backtest 2001-2023,RS,equal (0.5/0.5),basis_risk,0.277,0.18,0.434,0.017,-0.006,0.051,0.092
+backtest 2001-2023,RS,equal (0.5/0.5),state_year_r,0.89,0.776,0.964,-0.023,-0.043,0.008,0.076
+backtest 2001-2023,RS,rep_only (0/1),auc_loss,0.892,0.828,0.935,-0.004,-0.019,0.009,0.311
+backtest 2001-2023,RS,rep_only (0/1),basis_risk,0.263,0.18,0.403,0.003,-0.018,0.029,0.369
+backtest 2001-2023,RS,rep_only (0/1),state_year_r,0.922,0.825,0.973,0.009,-0.023,0.028,0.682
+backtest 2001-2023,RS,fitted (leave-one-season-out),auc_loss,0.892,0.825,0.935,-0.005,-0.012,-0.0,0.002
+backtest 2001-2023,RS,fitted (leave-one-season-out),basis_risk,0.266,0.175,0.413,0.005,-0.001,0.018,0.053
+backtest 2001-2023,RS,fitted (leave-one-season-out),state_year_r,0.91,0.805,0.969,-0.003,-0.017,0.002,0.129
+holdout 2024-2025,RS,prior (0.25/0.75),auc_loss,0.816,,,,,,
+holdout 2024-2025,RS,prior (0.25/0.75),basis_risk,0.199,,,,,,
+holdout 2024-2025,RS,fao_ky (0.18/0.82),auc_loss,0.813,,,,,,
+holdout 2024-2025,RS,fao_ky (0.18/0.82),basis_risk,0.199,,,,,,
+holdout 2024-2025,RS,equal (0.5/0.5),auc_loss,0.825,,,,,,
+holdout 2024-2025,RS,equal (0.5/0.5),basis_risk,0.212,,,,,,
+holdout 2024-2025,RS,rep_only (0/1),auc_loss,0.807,,,,,,
+holdout 2024-2025,RS,rep_only (0/1),basis_risk,0.199,,,,,,
+holdout 2024-2025,RS,fitted (leave-one-season-out),auc_loss,0.814,,,,,,
+holdout 2024-2025,RS,fitted (leave-one-season-out),basis_risk,0.199,,,,,,
+backtest 2001-2023,PR,prior (0.25/0.75),auc_loss,0.821,0.747,0.866,,,,
+backtest 2001-2023,PR,prior (0.25/0.75),basis_risk,0.393,0.314,0.549,,,,
+backtest 2001-2023,PR,prior (0.25/0.75),state_year_r,0.853,0.657,0.935,,,,
+backtest 2001-2023,PR,fao_ky (0.18/0.82),auc_loss,0.82,0.749,0.864,-0.001,-0.006,0.004,0.4
+backtest 2001-2023,PR,fao_ky (0.18/0.82),basis_risk,0.395,0.319,0.553,0.002,-0.007,0.014,0.317
+backtest 2001-2023,PR,fao_ky (0.18/0.82),state_year_r,0.853,0.645,0.936,-0.0,-0.019,0.013,0.486
+backtest 2001-2023,PR,equal (0.5/0.5),auc_loss,0.814,0.731,0.866,-0.007,-0.023,0.007,0.168
+backtest 2001-2023,PR,equal (0.5/0.5),basis_risk,0.405,0.323,0.575,0.012,-0.017,0.042,0.214
+backtest 2001-2023,PR,equal (0.5/0.5),state_year_r,0.839,0.661,0.929,-0.014,-0.074,0.048,0.275
+backtest 2001-2023,PR,rep_only (0/1),auc_loss,0.812,0.743,0.857,-0.009,-0.029,0.009,0.193
+backtest 2001-2023,PR,rep_only (0/1),basis_risk,0.413,0.333,0.574,0.02,-0.011,0.066,0.195
+backtest 2001-2023,PR,rep_only (0/1),state_year_r,0.846,0.595,0.937,-0.007,-0.079,0.037,0.384
+backtest 2001-2023,PR,fitted (leave-one-season-out),auc_loss,0.816,0.736,0.862,-0.006,-0.011,-0.001,0.0
+backtest 2001-2023,PR,fitted (leave-one-season-out),basis_risk,0.401,0.323,0.561,0.008,-0.001,0.02,0.027
+backtest 2001-2023,PR,fitted (leave-one-season-out),state_year_r,0.84,0.623,0.93,-0.013,-0.037,-0.004,0.0
+holdout 2024-2025,PR,prior (0.25/0.75),auc_loss,0.639,,,,,,
+holdout 2024-2025,PR,prior (0.25/0.75),basis_risk,0.484,,,,,,
+holdout 2024-2025,PR,fao_ky (0.18/0.82),auc_loss,0.636,,,,,,
+holdout 2024-2025,PR,fao_ky (0.18/0.82),basis_risk,0.491,,,,,,
+holdout 2024-2025,PR,equal (0.5/0.5),auc_loss,0.648,,,,,,
+holdout 2024-2025,PR,equal (0.5/0.5),basis_risk,0.48,,,,,,
+holdout 2024-2025,PR,rep_only (0/1),auc_loss,0.628,,,,,,
+holdout 2024-2025,PR,rep_only (0/1),basis_risk,0.498,,,,,,
+holdout 2024-2025,PR,fitted (leave-one-season-out),auc_loss,0.639,,,,,,
+holdout 2024-2025,PR,fitted (leave-one-season-out),basis_risk,0.484,,,,,,

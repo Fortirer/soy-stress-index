@@ -55,6 +55,22 @@ What this says:
 - **Rain is the one idea left.** CHIRPS could not be tested (its server bans automated downloads); ERA5-Land (Copernicus, 0.1°, daily, needs a free API key) is the alternative. `scripts/21_chirps_rs.py` and the `chirps` variant of script 19 are ready for any daily rain table per municipality.
 - **How to sell RS today:** on what is proven there: early warning (by 15 January the index reaches the rainfall index's end-of-season skill, about six weeks earlier), portfolio-level correlation (state-year r 0.91 vs 0.76, CI above zero) and the 2024-2025 holdout (basis risk 0.20 vs 0.23).
 
+## Stage weights: prior, literature and data agree (issue #8)
+
+The index weights reproductive-stage stress 0.75 and vegetative 0.25, a physiology prior. `scripts/22_stage_weights.py` tests it against the FAO yield-response factors for soybean (Doorenbos & Kassam 1979: vegetative 0.2, flowering 0.8, yield formation 1.0, i.e. 0.18/0.82), equal weights, reproductive only, and a weight fitted to the data season by season (leave-one-season-out).
+
+| RS + PR | AUC 2001-2023 | Change vs prior (95% CI) | AUC 2024-2025 |
+| --- | --- | --- | --- |
+| **Prior 0.25 / 0.75** | **0.862** | | 0.674 |
+| FAO Ky 0.18 / 0.82 | 0.861 | 0.000 (-0.004 to +0.003) | 0.665 |
+| Equal 0.5 / 0.5 | 0.854 | -0.008 (-0.020 to +0.003) | 0.700 |
+| Reproductive only | 0.855 | -0.006 (-0.019 to +0.004) | 0.643 |
+| Fitted per season | 0.857 | -0.005 (-0.010 to -0.002) | 0.675 |
+
+- The data choose a reproductive weight of 0.65-0.90 (median 0.75 in PR, 0.80 in RS), the FAO factors give 0.82 and the prior is 0.75: **three independent sources agree**.
+- Fitting the weight does not help; it is slightly worse than the prior. The prior stays.
+- Write-up for the FAPESP PIPE proposal (Portuguese), including the next step with the eCO2 x drought x warming experiments and the meta-analysis: [`docs/pipe_calibracao_estadios_pt.md`](docs/pipe_calibracao_estadios_pt.md). That step waits for data ownership to be confirmed (#17).
+
 ## Expected loss: from index to % and R$/ha
 
 Buyers price risk in % of yield and in reais, not in z-scores. `scripts/18_expected_loss.py` maps the Turgor index, per state, to:
