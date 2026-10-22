@@ -9,8 +9,11 @@ backtest 2001-2023 (RS),vpd,auc_loss,0.888,0.818,0.932,0.031,-0.029,0.088,0.84
 backtest 2001-2023 (RS),vpd,basis_risk,0.277,0.181,0.434,-0.034,-0.141,0.09,0.707
 backtest 2001-2023 (RS),vpd,state_year_r,0.903,0.791,0.964,0.142,-0.004,0.296,0.97
 backtest 2001-2023 (RS),modis250,auc_loss,0.898,0.839,0.936,0.041,-0.012,0.096,0.932
-backtest 2001-2023 (RS),modis250,basis_risk,0.26,0.172,0.401,-0.052,-0.15,0.061,0.815
+backtest 2001-2023 (RS),modis250,basis_risk,0.26,0.172,0.401,-0.052,-0.15,0.061,0.814
 backtest 2001-2023 (RS),modis250,state_year_r,0.912,0.811,0.969,0.151,0.004,0.313,0.975
+backtest 2001-2023 (RS),soymask,auc_loss,0.895,0.829,0.939,0.038,-0.02,0.095,0.895
+backtest 2001-2023 (RS),soymask,basis_risk,0.267,0.172,0.413,-0.045,-0.153,0.079,0.75
+backtest 2001-2023 (RS),soymask,state_year_r,0.905,0.795,0.966,0.144,-0.006,0.307,0.971
 holdout 2024-2025 (RS),Rainfall index,auc_loss,0.777,,,,,,
 holdout 2024-2025 (RS),Rainfall index,basis_risk,0.231,,,,,,
 holdout 2024-2025 (RS),base,auc_loss,0.816,,,,,,
@@ -19,3 +22,5 @@ holdout 2024-2025 (RS),vpd,auc_loss,0.817,,,,,,
 holdout 2024-2025 (RS),vpd,basis_risk,0.199,,,,,,
 holdout 2024-2025 (RS),modis250,auc_loss,0.815,,,,,,
 holdout 2024-2025 (RS),modis250,basis_risk,0.201,,,,,,
+holdout 2024-2025 (RS),soymask,auc_loss,0.828,,,,,,
+holdout 2024-2025 (RS),soymask,basis_risk,0.191,,,,,,

@@ -45,14 +45,14 @@ In RS the Turgor index beats the rainfall index on average, but the municipality
 | Turgor index (current) | 0.896 | +0.039 (-0.015 to +0.095) | 0.26 | -0.051 (-0.147 to +0.060) | 0.816 / 0.20 |
 | + VPD by stage | 0.888 | +0.031 (-0.029 to +0.088) | 0.28 | -0.034 (-0.141 to +0.090) | 0.817 / 0.20 |
 | MODIS at full 250 m | 0.898 | +0.041 (-0.012 to +0.096) | 0.26 | -0.052 (-0.150 to +0.061) | 0.815 / 0.20 |
-| MapBiomas soybean-only mask | not run: needs `storage.googleapis.com` | | | | |
-| CHIRPS rain instead of NASA POWER | not run: needs `data.chc.ucsb.edu` | | | | |
+| MapBiomas soybean-only mask (250 m) | 0.895 | +0.038 (-0.020 to +0.095) | 0.27 | -0.045 (-0.153 to +0.079) | 0.828 / 0.19 |
+| CHIRPS rain instead of NASA POWER | not tested: the CHIRPS server's anti-bot system bans automated downloads | | | | |
 
 What this says:
 
-- **Neither VPD nor 250 m changes anything.** VPD adds no information beyond heat and water deficit; reading MODIS at 250 m instead of ~1 km gives the same municipal curves. Resolution of the canopy signal is not the limit in RS.
+- **None of the canopy or weather changes moves RS.** VPD adds no information beyond heat and water deficit. Reading MODIS at 250 m, and keeping only MapBiomas soybean pixels (Collection 9, class 39, at least half of each 250 m pixel), give almost the same municipal curves. The soybean mask is slightly better on the 2024-2025 holdout (AUC 0.83 vs 0.82, basis risk 0.19 vs 0.20), too little to matter. How the canopy is measured is not the limit in RS.
 - **The limit is statistical as much as scientific.** With 23 seasons the 95% interval on the basis-risk difference is about ±0.10 wide, so a real improvement smaller than about 0.10 cannot be proven at municipality level, whatever the model. In RS the rainfall index already reaches basis risk 0.31, because RS losses are mostly rainfall droughts.
-- **Still open:** a soybean-only mask (MapBiomas) and better rain (CHIRPS) are the two changes most likely to help, and need the two data hosts above. They can be run with `scripts/20_modis_rs_highres.py --soymask` and the `chirps` variant once the data are reachable.
+- **Rain is the one idea left.** CHIRPS could not be tested (its server bans automated downloads); ERA5-Land (Copernicus, 0.1°, daily, needs a free API key) is the alternative. `scripts/21_chirps_rs.py` and the `chirps` variant of script 19 are ready for any daily rain table per municipality.
 - **How to sell RS today:** on what is proven there: early warning (by 15 January the index reaches the rainfall index's end-of-season skill, about six weeks earlier), portfolio-level correlation (state-year r 0.91 vs 0.76, CI above zero) and the 2024-2025 holdout (basis risk 0.20 vs 0.23).
 
 ## Expected loss: from index to % and R$/ha
