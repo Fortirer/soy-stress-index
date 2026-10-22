@@ -35,6 +35,33 @@ Replay of 15 February 2025 (2024/25 RS drought, 2025 left out of the reference):
 
 ![Replay 15 Feb 2025](monitor/replays/2024-25/2025-02-15/map.png)
 
+## Expected loss: from index to % and R$/ha
+
+Buyers price risk in % of yield and in reais, not in z-scores. `scripts/18_expected_loss.py` maps the Turgor index, per state, to:
+
+- **P(loss > 10%)**, the chance the municipality ends more than 10% below its yield trend;
+- **expected yield vs trend** (%);
+- **expected shortfall**, the mean loss below trend (gains count as zero), converted to **R$/ha** with the trend yield and the soybean price (default R$ 153.49 per 60 kg bag, CEPEA/ESALQ Paraná, 28 Sep 2026; `--price`).
+
+The maps are isotonic (monotone) regressions: more stress never gives a better expected outcome, with no other shape imposed. Each 2001-2023 season is predicted by maps fitted on the other seasons; 2024-2025 by maps fitted on 2001-2023 only. Every municipality-season has its values in `results/expected_loss_2001_2025.csv.gz`, and the live monitor reports them every week.
+
+| Test | Region | Brier score (P loss) | Climatology | Brier skill | Expected yield: r with observed |
+| --- | --- | --- | --- | --- | --- |
+| Leave-one-season-out 2001-2023 | RS + PR | 0.126 | 0.204 | **+0.38** | 0.71 |
+| | RS | 0.114 | 0.220 | +0.48 | 0.76 |
+| | PR | 0.139 | 0.186 | +0.25 | 0.57 |
+| Holdout 2024-2025 | RS + PR | 0.236 | 0.280 | **+0.16** | 0.42 |
+| | RS | 0.187 | 0.309 | +0.40 | 0.54 |
+| | PR | 0.289 | 0.248 | **-0.17** | 0.36 |
+
+Climatology = each state's past loss rate. Brier skill above 0 means better than that baseline.
+
+![Expected loss calibration](figures/fig8_expected_loss.png)
+
+- **2001-2023: well calibrated.** When the model says 92% the observed share is 91%; when it says 15%, 18% (`results/expected_loss_calibration.csv`).
+- **2024-2025: useful in RS, not yet in PR.** The two new seasons had far more losses than usual (48% of municipality-seasons against 29% in 2001-2023), partly from the May 2024 floods and partly because the yield trend is extrapolated two years ahead. The model was **too confident at both ends**: municipalities given under 5% lost in 20% of cases, and those given 99% in 73%. In PR the probabilities were worse than the plain base rate.
+- Probabilities are therefore capped at 2-98%, and every report states that these are base rates from past seasons, not guarantees. The next steps are a per-state recalibration as new seasons arrive and the field-yield pilot.
+
 ---
 
 ## v1 results: satellite crop stages + NDVI cut basis risk

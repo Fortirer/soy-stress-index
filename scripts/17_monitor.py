@@ -32,7 +32,8 @@ from ssi.data import load_boundaries  # noqa: E402
 from ssi.early import WINDOWS, asof_features, turgor_index  # noqa: E402
 from ssi.index import components  # noqa: E402
 from ssi.monitor import (CLASS_COLORS, anchor_date, anchor_for, harvest_year_of,  # noqa: E402
-                         lookup_loss_rate, own_percentile, stress_class)
+                         own_percentile, stress_class)
+from ssi.expected_loss import predict as predict_loss, shortfall_rs_per_ha  # noqa: E402
 from ssi.satellite import modis_season_ndvi  # noqa: E402
 from ssi.weather import daily_indicators, fetch_power  # noqa: E402
 
@@ -41,6 +42,7 @@ ap.add_argument("--asof", default=pd.Timestamp.today().strftime("%Y-%m-%d"))
 ap.add_argument("--states", nargs="+", default=["RS", "PR"])
 ap.add_argument("--out", default=str(ROOT / "monitor"))
 ap.add_argument("--workers", type=int, default=8)
+ap.add_argument("--price", type=float, default=153.49, help="soybean R$ per 60 kg bag (CEPEA/ESALQ PR, 28 Sep 2026)")
 args = ap.parse_args()
 
 asof = pd.Timestamp(args.asof)
@@ -116,15 +118,23 @@ now["main_driver"] = now[["water_z", "heat_z", "canopy_z"]].idxmax(axis=1).map(
     {"water_z": "water deficit", "heat_z": "heat", "canopy_z": "weak canopy (NDVI)"})
 now.loc[now[["water_z", "heat_z", "canopy_z"]].max(axis=1) <= 0.5, "main_driver"] = "-"
 now["stress_class"] = now["percentile_vs_past"].map(stress_class)
-lr = pd.read_csv(RESULTS / "monitor_loss_rates.csv")
-now["past_loss_frequency"] = [lookup_loss_rate(lr, anchor, s) for s in now["turgor_index"]]
+now["st"] = now["fips5"].astype(str).str[:2].map({"43": "RS", "41": "PR"})
+# expected outcome at this date (isotonic maps per state and anchor, script 18)
+em = pd.read_csv(RESULTS / "expected_loss_models_anchors.csv")
+em = em[em["anchor"] == anchor]
+pe = predict_loss(em, now.rename(columns={"turgor_index": "score"}))
+now["p_loss"] = pe["p_loss"].values
+now["expected_yield_vs_trend"] = pe["expected_anomaly"].values
+trend = pd.read_csv(RESULTS / "yield_trend_next.csv").set_index("fips5")
+now["trend_kg_ha"] = (now["fips5"].map(trend["intercept"]) + now["fips5"].map(trend["slope"]) * hy).round(0)
+now["expected_shortfall_rs_ha"] = shortfall_rs_per_ha(pe["expected_shortfall"].values, now["trend_kg_ha"], args.price)
 names = pd.read_csv(DATA / "panel.csv.gz", usecols=["fips5", "county"]).drop_duplicates("fips5") \
     .set_index("fips5")["county"].str.split(" - ").str[0].str.title().to_dict()
 area = pd.read_csv(RESULTS / "municipal_scores_2001_2025.csv.gz").sort_values("year") \
     .groupby("fips5")["area_harvested_ha"].last()
-now["st"] = now["fips5"].astype(str).str[:2].map({"43": "RS", "41": "PR"})
 now["soy_area_ha_last"] = now["fips5"].map(area)
-cols = ["st", "fips5", "turgor_index", "percentile_vs_past", "stress_class", "past_loss_frequency",
+cols = ["st", "fips5", "turgor_index", "percentile_vs_past", "stress_class", "p_loss",
+        "expected_yield_vs_trend", "expected_shortfall_rs_ha",
         "main_driver", "water_z", "heat_z", "canopy_z", "soy_area_ha_last"]
 now = now[cols].sort_values("turgor_index", ascending=False).round(3)
 
@@ -163,18 +173,25 @@ fig.text(0.02, 0.02, "severe = above the 95th percentile of the municipality's o
          fontsize=6.5, color="#56695E")
 fig.savefig(out / "map.png", dpi=170, bbox_inches="tight")
 
+def _pct(v, sign=False):
+    return "" if pd.isna(v) else (f"{100 * v:+.0f}%" if sign else f"{100 * v:.0f}%")
+
+
 top = now.head(20).copy()
 top["municipality"] = [names.get(c) or c for c in top["fips5"]]
 lines = [f"# Turgor monitor - season {season}, data up to {adate.date()}", "",
          f"Municipalities by class: " + ", ".join(f"{k} {counts.get(k, 0)}" for k in ["severe", "high", "watch", "normal"]), "",
          "![map](map.png)", "", "## 20 most stressed municipalities", "",
-         "| # | State | Municipality (IBGE) | Turgor index | Percentile vs past | Class | Past loss frequency* | Main driver |",
-         "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+         "| # | State | Municipality (IBGE) | Turgor index | Percentile vs past | Class | P(loss > 10%)* | Expected yield vs trend* | Expected loss R$/ha* | Main driver |",
+         "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
 for i, r in enumerate(top.itertuples(), 1):
     lines.append(f"| {i} | {r.st} | {r.municipality} | {r.turgor_index:.2f} | {r.percentile_vs_past:.0f} | {r.stress_class} | "
-                 f"{'' if pd.isna(r.past_loss_frequency) else f'{100 * r.past_loss_frequency:.0f}%'} | {r.main_driver} |")
-lines += ["", "\\* Share of past municipality-seasons (2001-2025) with yield more than 10% below trend, "
-          "among those with a similar index at this date. Not a forecast of this season's yield."]
+                 f"{_pct(r.p_loss)} | {_pct(r.expected_yield_vs_trend, sign=True)} | "
+                 f"{'' if pd.isna(r.expected_shortfall_rs_ha) else f'{r.expected_shortfall_rs_ha:,.0f}'} | {r.main_driver} |")
+lines += ["", f"\\* From how past municipality-seasons (2001-2025) with a similar index at this date ended "
+          f"(isotonic maps per state, `scripts/18_expected_loss.py`). R$/ha = expected shortfall below the yield trend "
+          f"x trend yield x R$ {args.price:.2f} per 60 kg bag. Base rates, not guarantees: on the 2024-2025 test the "
+          f"probabilities were too confident at both ends."]
 (out / "summary.md").write_text("\n".join(lines) + "\n")
 
 latest = out_root / "latest"

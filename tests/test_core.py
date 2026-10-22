@@ -169,3 +169,16 @@ def test_monitor_anchors_and_classes():
     s = pd.Series(list(range(20)) + [25.0])
     pct = own_percentile(s, pd.Series([1] * 21), np.array([False] * 20 + [True]))
     assert pct.iloc[-1] == 100.0 and pct.iloc[:20].isna().all()
+
+
+def test_expected_loss_maps_are_monotone_and_capped():
+    import numpy as np
+    import pandas as pd
+    from ssi.expected_loss import fit_tables, predict
+    rng = np.random.default_rng(5)
+    s = rng.normal(0, 1, 2000)
+    df = pd.DataFrame({"st": "RS", "score": s, "rel_anom": -0.08 * s + rng.normal(0, 0.1, 2000)})
+    t = fit_tables(df)
+    p = predict(t, pd.DataFrame({"st": "RS", "score": np.linspace(-5, 5, 50)}))
+    assert np.all(np.diff(p["p_loss"].values) >= 0) and np.all(np.diff(p["expected_anomaly"].values) <= 0)
+    assert p["p_loss"].max() <= 0.98 and p["p_loss"].min() >= 0.02
