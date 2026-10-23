@@ -7,6 +7,8 @@ The index scores each municipality and season for water deficit, extreme heat an
 > Status: **v1 (satellite + weather by crop stage) is built and backtested** for Rio Grande do Sul and Paraná, harvests 2001-2023, **tested out of sample on 2024 and 2025**, with confidence intervals and an early-warning test. A Sentinel-2 field pilot (15 plots, 2020/21 vs 2021/22) and a ready-to-run field-yield validation for a co-op pilot are included.
 
 > **Validation report (4 pages):** [Português](docs/report/turgor_validation_report_pt.pdf) · [English](docs/report/turgor_validation_report_en.pdf). Method, backtest with confidence intervals, the 2024-2025 test, lead time, expected loss and the limits. Rebuilt from `results/` by `scripts/23_public_report.py`.
+>
+> **US Midwest (English):** the same analysis for Illinois soybean, a 12-state weather check and a US business pack are in [`midwest/`](midwest/README.md).
 
 ---
 

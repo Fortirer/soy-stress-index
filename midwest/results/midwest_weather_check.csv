@@ -1,0 +1,79 @@
+test,region,index,n,loss_rate,auc_loss,basis_risk,state_year_r
+backtest 2001-2023,All 12 states,Turgor weather-only,18544,0.231,0.712,0.533,0.482
+backtest 2001-2023,All 12 states,Rainfall Jul-Aug,18544,0.231,0.745,0.487,0.52
+backtest 2001-2023,All 12 states,"Palmer drought index, Aug",18544,0.231,0.691,0.552,0.412
+backtest 2001-2023,IA,Turgor weather-only,2197,0.172,0.782,0.459,0.487
+backtest 2001-2023,IA,Rainfall Jul-Aug,2197,0.172,0.813,0.462,0.576
+backtest 2001-2023,IA,"Palmer drought index, Aug",2197,0.172,0.737,0.615,0.353
+backtest 2001-2023,IL,Turgor weather-only,2194,0.152,0.771,0.526,0.54
+backtest 2001-2023,IL,Rainfall Jul-Aug,2194,0.152,0.778,0.52,0.566
+backtest 2001-2023,IL,"Palmer drought index, Aug",2194,0.152,0.692,0.535,0.342
+backtest 2001-2023,IN,Turgor weather-only,1932,0.175,0.674,0.643,0.316
+backtest 2001-2023,IN,Rainfall Jul-Aug,1932,0.175,0.722,0.513,0.305
+backtest 2001-2023,IN,"Palmer drought index, Aug",1932,0.175,0.586,0.664,0.158
+backtest 2001-2023,KS,Turgor weather-only,1691,0.347,0.815,0.327,0.88
+backtest 2001-2023,KS,Rainfall Jul-Aug,1691,0.347,0.765,0.395,0.739
+backtest 2001-2023,KS,"Palmer drought index, Aug",1691,0.347,0.776,0.365,0.725
+backtest 2001-2023,MI,Turgor weather-only,1020,0.22,0.625,0.661,0.131
+backtest 2001-2023,MI,Rainfall Jul-Aug,1020,0.22,0.762,0.496,0.485
+backtest 2001-2023,MI,"Palmer drought index, Aug",1020,0.22,0.633,0.638,0.255
+backtest 2001-2023,MN,Turgor weather-only,1621,0.233,0.605,0.664,0.211
+backtest 2001-2023,MN,Rainfall Jul-Aug,1621,0.233,0.722,0.542,0.556
+backtest 2001-2023,MN,"Palmer drought index, Aug",1621,0.233,0.617,0.693,0.284
+backtest 2001-2023,MO,Turgor weather-only,1767,0.259,0.796,0.4,0.737
+backtest 2001-2023,MO,Rainfall Jul-Aug,1767,0.259,0.799,0.385,0.739
+backtest 2001-2023,MO,"Palmer drought index, Aug",1767,0.259,0.797,0.385,0.683
+backtest 2001-2023,ND,Turgor weather-only,666,0.269,0.55,0.62,0.014
+backtest 2001-2023,ND,Rainfall Jul-Aug,666,0.269,0.617,0.587,0.289
+backtest 2001-2023,ND,"Palmer drought index, Aug",666,0.269,0.672,0.553,0.177
+backtest 2001-2023,NE,Turgor weather-only,1548,0.266,0.69,0.517,0.709
+backtest 2001-2023,NE,Rainfall Jul-Aug,1548,0.266,0.657,0.539,0.693
+backtest 2001-2023,NE,"Palmer drought index, Aug",1548,0.266,0.688,0.505,0.729
+backtest 2001-2023,OH,Turgor weather-only,1723,0.204,0.687,0.636,0.457
+backtest 2001-2023,OH,Rainfall Jul-Aug,1723,0.204,0.76,0.435,0.414
+backtest 2001-2023,OH,"Palmer drought index, Aug",1723,0.204,0.671,0.557,0.218
+backtest 2001-2023,SD,Turgor weather-only,865,0.296,0.77,0.402,0.642
+backtest 2001-2023,SD,Rainfall Jul-Aug,865,0.296,0.75,0.445,0.442
+backtest 2001-2023,SD,"Palmer drought index, Aug",865,0.296,0.791,0.406,0.579
+backtest 2001-2023,WI,Turgor weather-only,1320,0.295,0.667,0.566,0.362
+backtest 2001-2023,WI,Rainfall Jul-Aug,1320,0.295,0.767,0.445,0.587
+backtest 2001-2023,WI,"Palmer drought index, Aug",1320,0.295,0.612,0.609,0.223
+holdout 2024-2025,All 12 states,Turgor weather-only,625,0.224,0.572,0.621,0.173
+holdout 2024-2025,All 12 states,Rainfall Jul-Aug,625,0.224,0.705,0.514,0.584
+holdout 2024-2025,All 12 states,"Palmer drought index, Aug",625,0.224,0.553,0.693,0.131
+holdout 2024-2025,IA,Turgor weather-only,68,0.059,0.176,1.0,
+holdout 2024-2025,IA,Rainfall Jul-Aug,68,0.059,0.832,0.25,
+holdout 2024-2025,IA,"Palmer drought index, Aug",68,0.059,0.387,1.0,
+holdout 2024-2025,IL,Turgor weather-only,61,0.033,0.627,1.0,
+holdout 2024-2025,IL,Rainfall Jul-Aug,61,0.033,0.924,0.5,
+holdout 2024-2025,IL,"Palmer drought index, Aug",61,0.033,0.576,1.0,
+holdout 2024-2025,IN,Turgor weather-only,73,0.082,0.781,0.833,
+holdout 2024-2025,IN,Rainfall Jul-Aug,73,0.082,0.858,0.833,
+holdout 2024-2025,IN,"Palmer drought index, Aug",73,0.082,0.575,1.0,
+holdout 2024-2025,KS,Turgor weather-only,45,0.422,0.66,0.474,
+holdout 2024-2025,KS,Rainfall Jul-Aug,45,0.422,0.717,0.421,
+holdout 2024-2025,KS,"Palmer drought index, Aug",45,0.422,0.636,0.474,
+holdout 2024-2025,MI,Turgor weather-only,42,0.071,0.803,0.667,
+holdout 2024-2025,MI,Rainfall Jul-Aug,42,0.071,0.821,1.0,
+holdout 2024-2025,MI,"Palmer drought index, Aug",42,0.071,0.726,1.0,
+holdout 2024-2025,MN,Turgor weather-only,55,0.364,0.643,0.55,
+holdout 2024-2025,MN,Rainfall Jul-Aug,55,0.364,0.683,0.55,
+holdout 2024-2025,MN,"Palmer drought index, Aug",55,0.364,0.446,0.7,
+holdout 2024-2025,MO,Turgor weather-only,55,0.236,0.91,0.231,
+holdout 2024-2025,MO,Rainfall Jul-Aug,55,0.236,0.764,0.615,
+holdout 2024-2025,MO,"Palmer drought index, Aug",55,0.236,0.681,0.846,
+holdout 2024-2025,ND,Turgor weather-only,31,0.032,0.9,1.0,
+holdout 2024-2025,ND,Rainfall Jul-Aug,31,0.032,0.833,1.0,
+holdout 2024-2025,ND,"Palmer drought index, Aug",31,0.032,0.633,1.0,
+holdout 2024-2025,NE,Turgor weather-only,49,0.245,0.662,0.417,
+holdout 2024-2025,NE,Rainfall Jul-Aug,49,0.245,0.457,0.667,
+holdout 2024-2025,NE,"Palmer drought index, Aug",49,0.245,0.667,0.5,
+holdout 2024-2025,OH,Turgor weather-only,61,0.475,0.673,0.379,
+holdout 2024-2025,OH,Rainfall Jul-Aug,61,0.475,0.85,0.207,
+holdout 2024-2025,OH,"Palmer drought index, Aug",61,0.475,0.615,0.414,
+holdout 2024-2025,SD,Turgor weather-only,31,0.323,0.624,0.5,
+holdout 2024-2025,SD,Rainfall Jul-Aug,31,0.323,0.614,0.5,
+holdout 2024-2025,SD,"Palmer drought index, Aug",31,0.323,0.381,0.7,
+holdout 2024-2025,WI,Turgor weather-only,54,0.389,0.494,0.619,
+holdout 2024-2025,WI,Rainfall Jul-Aug,54,0.389,0.599,0.571,
+holdout 2024-2025,WI,"Palmer drought index, Aug",54,0.389,0.543,0.571,

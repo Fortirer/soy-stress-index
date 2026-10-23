@@ -1,0 +1,28 @@
+index,metric,estimate,ci_low,ci_high,diff_vs_ref,diff_ci_low,diff_ci_high,p_better,region
+Turgor weather-only,auc_loss,0.712,0.644,0.77,-0.032,-0.086,0.01,0.075,All 12 states
+Turgor weather-only,basis_risk,0.533,0.449,0.66,0.046,-0.003,0.11,0.032,All 12 states
+Turgor weather-only,state_year_r,0.482,0.302,0.606,-0.038,-0.197,0.094,0.301,All 12 states
+Rainfall Jul-Aug,auc_loss,0.745,0.7,0.783,,,,,All 12 states
+Rainfall Jul-Aug,basis_risk,0.487,0.42,0.593,,,,,All 12 states
+Rainfall Jul-Aug,state_year_r,0.52,0.375,0.636,,,,,All 12 states
+"Palmer drought index, Aug",auc_loss,0.691,0.625,0.741,-0.054,-0.1,-0.019,0.0,All 12 states
+"Palmer drought index, Aug",basis_risk,0.552,0.47,0.66,0.065,0.024,0.098,0.001,All 12 states
+"Palmer drought index, Aug",state_year_r,0.412,0.257,0.524,-0.108,-0.245,0.019,0.063,All 12 states
+Turgor weather-only,auc_loss,0.782,0.577,0.876,-0.031,-0.12,0.035,0.178,IA
+Turgor weather-only,basis_risk,0.459,0.275,0.82,-0.003,-0.119,0.18,0.41,IA
+Turgor weather-only,state_year_r,0.487,-0.033,0.753,-0.088,-0.481,0.074,0.155,IA
+Rainfall Jul-Aug,auc_loss,0.813,0.692,0.876,,,,,IA
+Rainfall Jul-Aug,basis_risk,0.462,0.354,0.667,,,,,IA
+Rainfall Jul-Aug,state_year_r,0.576,0.325,0.8,,,,,IA
+"Palmer drought index, Aug",auc_loss,0.737,0.547,0.827,-0.076,-0.166,-0.012,0.009,IA
+"Palmer drought index, Aug",basis_risk,0.615,0.433,0.782,0.154,-0.017,0.286,0.042,IA
+"Palmer drought index, Aug",state_year_r,0.353,-0.071,0.633,-0.223,-0.564,-0.02,0.01,IA
+Turgor weather-only,auc_loss,0.771,0.606,0.866,-0.007,-0.128,0.076,0.399,IL
+Turgor weather-only,basis_risk,0.526,0.375,0.79,0.006,-0.14,0.152,0.454,IL
+Turgor weather-only,state_year_r,0.54,0.143,0.793,-0.026,-0.374,0.149,0.348,IL
+Rainfall Jul-Aug,auc_loss,0.778,0.643,0.878,,,,,IL
+Rainfall Jul-Aug,basis_risk,0.52,0.376,0.784,,,,,IL
+Rainfall Jul-Aug,state_year_r,0.566,0.342,0.795,,,,,IL
+"Palmer drought index, Aug",auc_loss,0.692,0.494,0.829,-0.086,-0.235,-0.0,0.024,IL
+"Palmer drought index, Aug",basis_risk,0.535,0.366,0.839,0.015,-0.129,0.163,0.315,IL
+"Palmer drought index, Aug",state_year_r,0.342,-0.123,0.707,-0.224,-0.651,0.03,0.045,IL

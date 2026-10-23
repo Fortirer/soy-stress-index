@@ -1,0 +1,13 @@
+test,index,n,loss_rate,auc_loss,basis_risk,state_year_r
+backtest 2001-2023,Rainfall Jul-Aug,2194,0.152,0.754,0.568,0.44
+backtest 2001-2023,"Palmer drought index, Aug",2194,0.152,0.692,0.535,0.342
+backtest 2001-2023,NDVI only,2194,0.152,0.675,0.718,0.437
+backtest 2001-2023,Turgor weather only,2194,0.152,0.741,0.574,0.5
+backtest 2001-2023,Turgor full season (+NDVI),2194,0.152,0.778,0.526,0.533
+backtest 2001-2023,Turgor index,2194,0.152,0.805,0.471,0.602
+holdout 2024-2025,Rainfall Jul-Aug,123,0.138,0.953,0.235,1.0
+holdout 2024-2025,"Palmer drought index, Aug",123,0.138,0.673,0.941,1.0
+holdout 2024-2025,NDVI only,123,0.138,0.708,0.0,1.0
+holdout 2024-2025,Turgor weather only,123,0.138,0.641,0.882,1.0
+holdout 2024-2025,Turgor full season (+NDVI),123,0.138,0.734,0.824,1.0
+holdout 2024-2025,Turgor index,123,0.138,0.875,0.529,1.0

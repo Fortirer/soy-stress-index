@@ -1,0 +1,8 @@
+level,formula,acres,revenue_usd_year
+TAM,"All US soybean, 81.2 M ac × US$ 1.00",81215000.0,81215000.0
+SAM,"IL + IA + IN soybean, 25.2 M ac × US$ 1.00",25200000.0,25200000.0
+SOM: Farm Credit associations and ag banks,"6 customers × 300,000 ac × US$ 1.00",1800000.0,1800000.0
+SOM: Grain co-ops and elevators,"8 customers × 150,000 ac × US$ 1.00",1200000.0,1200000.0
+SOM: Crop insurance agencies and AIPs (portfolio analytics),"3 customers × 500,000 ac × US$ 1.00",1500000.0,1500000.0
+SOM: Trigger licence (private products),3% of IL insured soybean acres × US$ 16/ac premium × 2%,230400.0,73924.08510638298
+SOM total (5 years),sum,,4573924.085106383
