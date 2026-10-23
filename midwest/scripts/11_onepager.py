@@ -58,12 +58,12 @@ def main():
     c.drawRightString(W - m, H - m - s - 0.05 * cm, "Illinois analysis + code")
 
     y = H - m - 2.4 * cm
-    head = P("One soybean stress index, validated on two continents", 22, GREEN, True, 25)
+    head = P("See Illinois soybean drought losses before harvest", 22, GREEN, True, 25)
     w, h = head.wrap(W - 2 * m - 3 * cm, 100)
     head.drawOn(c, m, y - h)
     y -= h + 0.25 * cm
     sub = P("Turgor turns soybean physiology (when drought and heat hit flowering and seed fill) into a weekly "
-            "county stress map and expected loss, from satellite and weather data only. Built in Brazil; tested in Illinois.", 11.5, MUTED)
+            "county stress map and expected loss, from satellite and weather data only. Tested on every Illinois county since 2001.", 11.5, MUTED)
     w, h = sub.wrap(W - 2 * m - 3 * cm, 100)
     sub.drawOn(c, m, y - h)
     y -= h + 0.6 * cm
@@ -84,7 +84,7 @@ def main():
     y = block("What",
               "Weekly, June to October: crop stage from MODIS NDVI (corn–soybean pixels, USDA Cropland Data Layer), water deficit, "
               "heat above 30 °C and their interaction from NASA POWER, weighted 3× at flowering and seed fill. "
-              "Same formula and weights as in Brazil: nothing was tuned on Illinois.", y)
+              "Fixed physiology-based weights, not fitted to the yields they are tested on.", y)
     t = P("Illinois evidence (102 counties, 2001–2023 backtest; 2,194 county-seasons)", 12, GREEN, True)
     w, h = t.wrap(W - 2 * m, 50)
     t.drawOn(c, m, y - h)
@@ -106,13 +106,13 @@ def main():
     note = P("<b>Honest limits:</b> the gain over rainfall is not statistically proven in Illinois (better in 78–85% of resampled "
              "season sets), and on the 2024–25 holdout (17 losses) rainfall did better. <b>2003:</b> July–August rain looked normal, "
              "the index ranked the season 78th percentile of stress; yields ended −17%. <b>15 July 2012:</b> 99 of 102 counties "
-             "rated severe; they ended −17%. <b>Brazil</b> (780 municipalities): AUC 0.86 vs 0.78 for rainfall, gain proven, "
-             "8–12 weeks before harvest.", 9.5, MUTED, lead=12.5)
+             "rated severe; they ended −17%. <b>Timing:</b> by 1 September the index beats the end-of-season skill of the "
+             "rainfall index, 4–6 weeks before harvest.", 9.5, MUTED, lead=12.5)
     w, h = note.wrap(W - 2 * m, 200)
     note.drawOn(c, m, y - h)
     y -= h + 0.55 * cm
     y = block("For whom",
-              "Reinsurers and parametric providers working in Brazil and the US; lenders and crop insurers watching a soybean book in "
+              "Reinsurers and parametric providers; lenders and crop insurers watching a soybean book in "
               "season; grain buyers forecasting supply. Pricing to test: per portfolio per year, or US$ 0.25–2 per acre per season.", y)
     y = block("Looking for",
               "<b>Conversations</b> with lenders, insurers and grain buyers about how they track crop risk today. "
